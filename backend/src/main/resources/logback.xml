@@ -1,0 +1,41 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] %-30.30logger: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APP-LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/app.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] %-30.30logger: %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SPRING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/spring.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] %-30.30logger: %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/spring-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="pw.react.backend" level="info">
+        <appender-ref ref="APP-LOGGER" />
+    </logger>
+
+    <logger name="org.springframework" level="info" >
+        <appender-ref ref="SPRING" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

@@ -1,0 +1,345 @@
+{
+	"info": {
+		"_postman_id": "a6fada5c-643e-48f0-a271-22dd9dc77c7e",
+		"name": "REACT-BACKEND",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10117192"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.globals.set(\"JWT_TOKEN\", jsonData.jwttoken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"pawg\",\r\n    \"password\" : \"pw2021\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/auth/login",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.globals.unset(\"JWT_TOKEN\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/auth/logout",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-tokens",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/auth",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-all-companies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/companies",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-companies",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\r\n    \"name\" : \"TestNameAla2\",\r\n    \"startDateTime\" : \"2020-09-08T20:43:13\",\r\n    \"boardMembers\" : 1\r\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/companies",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-companies",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "security-header",
+						"type": "text",
+						"value": "secureMe"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\r\n    \"name\" : \"TestNameAla2\",\r\n    \"startDateTime\" : \"2020-09-08T20:43:13\",\r\n    \"boardMembers\" : 1\r\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/companies/1",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"companies",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-users",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"pawg\",\r\n    \"password\" : \"pw2021\",\r\n    \"email\" : \"test@test.pl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/users",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actuator-loggers",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/actuator/loggers",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"actuator",
+						"loggers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actuator-beans",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/actuator/beans",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"actuator",
+						"beans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actuator-heatlh",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/actuator/health",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actuator-profiles",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{PROTOCOL}}://{{DOMAIN_URL}}/actuator/env/spring.profiles.active",
+					"protocol": "{{PROTOCOL}}",
+					"host": [
+						"{{DOMAIN_URL}}"
+					],
+					"path": [
+						"actuator",
+						"env",
+						"spring.profiles.active"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{JWT_TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.headers.add(",
+					"    {",
+					"        \"key\" : \"security-header\",",
+					"        \"value\" : \"secureMe\"",
+					"    }",
+					");"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
