@@ -12,6 +12,11 @@ public record UserDto(Long id, String username, String password, @Email String e
 
     public static User convertToUser(UserDto userDto) {
         User user = new User();
+        User user2 = new User();
+
+
+
+
         user.setId(userDto.id());
         user.setUsername(userDto.username());
         user.setEmail(userDto.email());
