@@ -29,8 +29,8 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static pw.react.backend.controller.HeadersLogger.logHeaders;
 
 @RestController
 @RequestMapping(path = CompanyController.COMPANIES_PATH)
@@ -57,7 +57,7 @@ public class CompanyController {
     @PostMapping(path = "")
     public ResponseEntity<Collection<CompanyDto>> createCompanies(@RequestHeader HttpHeaders headers,
                                                                   @Valid @RequestBody List<CompanyDto> companies) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         List<Company> createdCompanies = companies.stream().map(CompanyDto::convertToCompany).toList();
         List<CompanyDto> result = repository.saveAll(createdCompanies)
                 .stream()
@@ -66,18 +66,9 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    private void logHeaders(@RequestHeader HttpHeaders headers) {
-        log.info("Controller request headers {}",
-                headers.entrySet()
-                        .stream()
-                        .map(entry -> String.format("%s->[%s]", entry.getKey(), String.join(",", entry.getValue())))
-                        .collect(joining(","))
-        );
-    }
-
     @GetMapping(path = "/{companyId}")
     public ResponseEntity<CompanyDto> getCompany(@RequestHeader HttpHeaders headers, @PathVariable Long companyId) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         CompanyDto result = repository.findById(companyId)
                 .map(CompanyDto::valueFrom)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Company with %d does not exist", companyId)));
@@ -86,7 +77,7 @@ public class CompanyController {
 
     @GetMapping(path = "")
     public ResponseEntity<Collection<CompanyDto>> getAllCompanies(@RequestHeader HttpHeaders headers) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         return ResponseEntity.ok(repository.findAll().stream().map(CompanyDto::valueFrom).collect(toList()));
     }
 
@@ -94,13 +85,13 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCompany(@RequestHeader HttpHeaders headers, @PathVariable Long companyId,
                               @Valid @RequestBody CompanyDto updatedCompany) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         companyService.updateCompany(companyId, CompanyDto.convertToCompany(updatedCompany));
     }
 
     @DeleteMapping(path = "/{companyId}")
     public ResponseEntity<String> updateCompany(@RequestHeader HttpHeaders headers, @PathVariable Long companyId) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         boolean deleted = companyService.deleteCompany(companyId);
         if (!deleted) {
             return ResponseEntity.badRequest().body(String.format("Company with id %s does not exists.", companyId));
@@ -112,7 +103,7 @@ public class CompanyController {
     public ResponseEntity<UploadFileResponse> uploadLogo(@RequestHeader HttpHeaders headers,
                                                          @PathVariable Long companyId,
                                                          @RequestParam("file") MultipartFile file) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         CompanyLogo companyLogo = companyLogoService.storeLogo(companyId, file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -130,7 +121,7 @@ public class CompanyController {
 
     @GetMapping(value = "/{companyId}/logo", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody byte[] getLog(@RequestHeader HttpHeaders headers, @PathVariable Long companyId) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         CompanyLogo companyLogo = companyLogoService.getCompanyLogo(companyId);
         return companyLogo.getData();
     }
@@ -150,7 +141,7 @@ public class CompanyController {
     })
     @GetMapping(value = "/{companyId}/logo2")
     public ResponseEntity<Resource> getLogo2(@RequestHeader HttpHeaders headers, @PathVariable Long companyId) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         CompanyLogo companyLogo = companyLogoService.getCompanyLogo(companyId);
 
         return ResponseEntity.ok()
@@ -175,7 +166,7 @@ public class CompanyController {
     @DeleteMapping(value = "/{companyId}/logo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeLogo(@RequestHeader HttpHeaders headers, @PathVariable String companyId) {
-        logHeaders(headers);
+        logHeaders(headers, log);
         companyLogoService.deleteCompanyLogo(Long.parseLong(companyId));
     }
 
