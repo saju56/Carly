@@ -7,23 +7,26 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "car")
-public class Car implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = -6783504532088859179L;
-
+public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
-    private String name;
-    @Column(name = "start_date")
-    private LocalDateTime startDateTime;
-    /**
-     * By default, the column name in the database is going to be board_members
-     */
+    private String brand;
     @Column
-    private int boardMembers;
+    private String model;
+    @Column
+    private int seats;
+    @Column
+    private int doors;
+    @Column
+    private int mileage;
+    @Column
+    private long vin;
+    @Column(name = "fuel_type")
+    private String fuelType;
+    @Column
+    private int year;
 
     public long getId() {
         return id;
@@ -33,27 +36,67 @@ public class Car implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCarBrand() {
+        return brand;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCarBrand(String brand) {
+        this.brand = brand;
     }
 
-    public LocalDateTime getStartDateTime() {
-        return startDateTime;
+    public String getCarModel() {
+        return model;
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
-        this.startDateTime = startDateTime;
+    public void setCarModel(String model) {
+        this.model = model;
     }
 
-    public int getBoardMembers() {
-        return boardMembers;
+    public int getSeats() {
+        return seats;
     }
 
-    public void setBoardMembers(int boardMembers) {
-        this.boardMembers = boardMembers;
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+
+    public int getDoors() {
+        return seats;
+    }
+
+    public void setDoors(int doors) {
+        this.doors = doors;
+    }
+
+    public int getMileage() {
+        return mileage;
+    }
+
+    public void setMileage(int mileage) {
+        this.mileage = mileage;
+    }
+
+    public long getVin() {
+        return vin;
+    }
+
+    public void setVin(long vin) {
+        this.vin = vin;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }
