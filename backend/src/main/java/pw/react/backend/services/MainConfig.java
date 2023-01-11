@@ -89,6 +89,11 @@ public class MainConfig {
         return new BookingMainService();
     }
 
+    @Bean
+    public CarService carMainService() {
+        return new CarMainService();
+    }
+
     private String[] getCorsUrls() {
         return Optional.ofNullable(corsUrls)
                 .map(value -> value.split(","))

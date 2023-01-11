@@ -1,4 +1,4 @@
 package pw.react.backend.services;
 
-public class CarMainService {
+public class CarMainService implements CarService{
 }

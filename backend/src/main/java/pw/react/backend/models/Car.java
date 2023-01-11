@@ -30,6 +30,8 @@ public class Car {
     private String fuelType;
     @Column
     private int year;
+    @Column(name = "price_per_day")
+    private int pricePerDay;
 
     public UUID getId() {
         return id;
@@ -108,5 +110,13 @@ public class Car {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public int getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(int pricePerDay) {
+        this.pricePerDay = pricePerDay;
     }
 }
