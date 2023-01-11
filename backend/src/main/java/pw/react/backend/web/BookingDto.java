@@ -1,11 +1,34 @@
 package pw.react.backend.web;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import pw.react.backend.models.Booking;
+import pw.react.backend.utils.JsonDateDeserializer;
+import pw.react.backend.utils.JsonDateSerializer;
 
-public record BookingDTO(Long id) {
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-    // TODO: This is basic implementation and should be extended
-    public static BookingDTO valueFrom(Booking booking) {
-        return new BookingDTO(booking.getId());
+public record BookingDto(UUID id, UUID userId, UUID carId,
+                         @JsonDeserialize(using = JsonDateDeserializer.class)
+                         @JsonSerialize(using = JsonDateSerializer.class)
+                         LocalDateTime startDate,
+                         @JsonDeserialize(using = JsonDateDeserializer.class)
+                         @JsonSerialize(using = JsonDateSerializer.class)
+                         LocalDateTime endDate) {
+
+    public static final BookingDto EMPTY = new BookingDto(null, null, null, null, null);
+
+    public static BookingDto valueFrom(Booking booking) {
+        return new BookingDto(booking.getId(), booking.getUserId(), booking.getCarId(), booking.getStartDate(), booking.getEndDate());
+    }
+    public static Booking convertToBooking(BookingDto dto) {
+        Booking booking = new Booking();
+        booking.setId(dto.id());
+        booking.setCarId(dto.carId());
+        booking.setUserId(dto.userId());
+        booking.setStartDate(dto.startDate());
+        booking.setEndDate(dto.endDate());
+        return booking;
     }
 }
