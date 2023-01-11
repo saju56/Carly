@@ -1,37 +1,38 @@
 package pw.react.backend.models;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "booking")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @GeneratedValue
     private UUID id;
     @Column
     private UUID userId;
     @Column
     private UUID carId;
     @Column
-    private Date startDate;
+    private LocalDateTime startDate;
     @Column
-    private Date endDate;
+    private LocalDateTime endDate;
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -50,9 +51,7 @@ public class Booking {
     public void setId(UUID id) {
         this.id = id;
     }
-    @Id
     public UUID getId() {
         return id;
     }
-
 }

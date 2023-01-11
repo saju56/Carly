@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pw.react.backend.dao.BookingRepository;
 import pw.react.backend.services.BookingService;
-import pw.react.backend.web.BookingDTO;
+import pw.react.backend.web.BookingDto;
 
 import java.util.Collection;
 
@@ -36,8 +36,8 @@ public class BookingController {
     }
 
     @GetMapping(path = "")
-    public ResponseEntity<Collection<BookingDTO>> getAllBookings(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Collection<BookingDto>> getAllBookings(@RequestHeader HttpHeaders headers) {
         logHeaders(headers, logger);
-        return ResponseEntity.ok(bookingRepository.findAll().stream().map(BookingDTO::valueFrom).collect(toList()));
+        return ResponseEntity.ok(bookingRepository.findAll().stream().map(BookingDto::valueFrom).collect(toList()));
     }
 }
