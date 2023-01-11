@@ -1,22 +1,58 @@
 package pw.react.backend.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "booking")
 public class Booking {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
+    @Column
+    private UUID userId;
+    @Column
+    private UUID carId;
+    @Column
+    private Date startDate;
+    @Column
+    private Date endDate;
 
-    // TODO: This is basic implementation and should be extended
-    private Long id;
+    public Date getStartDate() {
+        return startDate;
+    }
 
-    public void setId(Long id) {
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setUserId(UUID userId){
+        this.userId = userId;
+    }
+    public UUID getUserId() {
+        return userId;
+    }
+    public void setCarId(UUID carId) {
+        this.carId = carId;
+    }
+    public UUID getCarId(){
+        return carId;
+    }
+    public void setId(UUID id) {
         this.id = id;
     }
-
     @Id
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
+
 }
