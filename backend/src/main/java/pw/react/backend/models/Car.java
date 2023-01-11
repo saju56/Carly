@@ -4,17 +4,20 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "car")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
     @Column
     private String brand;
     @Column
     private String model;
+    @Column
+    private boolean isTaken;
     @Column
     private int seats;
     @Column
@@ -28,11 +31,11 @@ public class Car {
     @Column
     private int year;
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -50,6 +53,13 @@ public class Car {
 
     public void setCarModel(String model) {
         this.model = model;
+    }
+    public boolean getStatus() {
+        return isTaken;
+    }
+
+    public void setStatus(boolean isTaken) {
+        this.isTaken = isTaken;
     }
 
     public int getSeats() {
