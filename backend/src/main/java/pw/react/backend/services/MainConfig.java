@@ -66,6 +66,10 @@ public class MainConfig {
     }
 
     @Bean
+    public ImageService imageService(CarImageRepository carImageRepository) {
+        return new CarImageService(carImageRepository);
+    }
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         getCorsUrls();
         return new WebMvcConfigurer() {
