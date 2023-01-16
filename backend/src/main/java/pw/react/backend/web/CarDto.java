@@ -7,10 +7,11 @@ import pw.react.backend.models.User;
 import java.util.UUID;
 
 public record CarDto(UUID id, String brand, String model, boolean status, int seats, int doors,
-                     String fuelType, int mileage, long vin, int year, int pricePerDay) {
+                     String fuelType, int mileage, long vin, int year, int pricePerDay, String city, String bodyType) {
     public static CarDto valueFrom(Car car) {
         return new CarDto(car.getId(), car.getCarBrand(), car.getCarModel(), car.getStatus(), car.getSeats(),
-                car.getDoors(), car.getFuelType(), car.getMileage(), car.getVin(), car.getYear(), car.getPricePerDay());
+                car.getDoors(), car.getFuelType(), car.getMileage(), car.getVin(), car.getYear(), car.getPricePerDay(),
+                car.getCity(), car.getBodyType());
     }
 
     public static Car convertToCar(CarDto carDto) {
@@ -26,6 +27,8 @@ public record CarDto(UUID id, String brand, String model, boolean status, int se
         car.setPricePerDay(carDto.pricePerDay());
         car.setVin(carDto.vin());
         car.setMileage(carDto.mileage());
+        car.setCity(carDto.city());
+        car.setBodyType(carDto.bodyType());
         return car;
     }
 }

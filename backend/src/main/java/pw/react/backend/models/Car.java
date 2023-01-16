@@ -24,6 +24,10 @@ public class Car {
     private int doors;
     @Column
     private int mileage;
+    @Column(name = "body_type")
+    private String bodyType;
+    @Column
+    private String city
     @Column
     private long vin;
     @Column(name = "fuel_type")
@@ -119,4 +123,9 @@ public class Car {
     public void setPricePerDay(int pricePerDay) {
         this.pricePerDay = pricePerDay;
     }
+
+    public String getCity() {return city;}
+    public void setCity(String city) {this.city = city;}
+    public String getBodyType() {return bodyType;}
+    public void setBodyType(String type) {this.bodyType = type;}
 }
