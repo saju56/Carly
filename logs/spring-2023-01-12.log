@@ -1,0 +1,38 @@
+2023-01-12 00:30:33 [INFO ] [restartedMain] sPropertyDefaultsPostProcessor: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-01-12 00:30:33 [INFO ] [restartedMain] sPropertyDefaultsPostProcessor: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-01-12 00:30:34 [INFO ] [restartedMain] epositoryConfigurationDelegate: Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-12 00:30:34 [INFO ] [restartedMain] epositoryConfigurationDelegate: Finished Spring Data repository scanning in 99 ms. Found 6 JPA repository interfaces.
+2023-01-12 00:30:35 [INFO ] [restartedMain] letWebServerApplicationContext: Root WebApplicationContext: initialization completed in 1994 ms
+2023-01-12 00:30:35 [WARN ] [restartedMain] letWebServerApplicationContext: Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is java.lang.RuntimeException: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'webMvcMetricsFilter' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/web/servlet/WebMvcMetricsAutoConfiguration.class]: Unsatisfied dependency expressed through method 'webMvcMetricsFilter' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'simpleMeterRegistry' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/export/simple/SimpleMetricsExportAutoConfiguration.class]: Initialization of bean failed; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourcePoolMetadataMeterBinder' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/jdbc/DataSourcePoolMetricsAutoConfiguration$DataSourcePoolMetadataMetricsConfiguration.class]: Unsatisfied dependency expressed through method 'dataSourcePoolMetadataMeterBinder' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception; nested exception is org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$DataSourceBeanCreationException: Failed to determine a suitable driver class
+2023-01-12 00:30:35 [ERROR] [restartedMain] LoggingFailureAnalysisReporter: 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+
+2023-01-12 00:31:10 [INFO ] [restartedMain] sPropertyDefaultsPostProcessor: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-01-12 00:31:10 [INFO ] [restartedMain] sPropertyDefaultsPostProcessor: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-01-12 00:31:11 [INFO ] [restartedMain] epositoryConfigurationDelegate: Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-12 00:31:11 [INFO ] [restartedMain] epositoryConfigurationDelegate: Finished Spring Data repository scanning in 62 ms. Found 6 JPA repository interfaces.
+2023-01-12 00:31:12 [INFO ] [restartedMain] letWebServerApplicationContext: Root WebApplicationContext: initialization completed in 1484 ms
+2023-01-12 00:31:13 [INFO ] [restartedMain] tainerEntityManagerFactoryBean: Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-01-12 00:31:14 [INFO ] [restartedMain] oint.web.EndpointLinksResolver: Exposing 7 endpoint(s) beneath base path '/actuator'
+2023-01-12 00:31:14 [INFO ] [restartedMain] web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71ede4b0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@208303c7, org.springframework.security.web.context.SecurityContextPersistenceFilter@39dd7906, org.springframework.security.web.header.HeaderWriterFilter@32ee78e8, org.springframework.security.web.authentication.logout.LogoutFilter@373b7a8a, pw.react.backend.security.filters.JwtRequestFilter@50813ceb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a80f093, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4d73f42d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@412c161c, org.springframework.security.web.session.SessionManagementFilter@5ef7284a, org.springframework.security.web.access.ExceptionTranslationFilter@5ba07368, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7c2cdfa]
+2023-01-12 00:31:15 [INFO ] [restartedMain] igure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-01-12 00:31:15 [INFO ] [restartedMain] ded.undertow.UndertowWebServer: Undertow started on port(s) 8080 (http)
+2023-01-12 00:32:14 [INFO ] [XNIO-1 task-1] .web.servlet.DispatcherServlet: Initializing Servlet 'dispatcherServlet'
+2023-01-12 00:32:14 [INFO ] [XNIO-1 task-1] .web.servlet.DispatcherServlet: Completed initialization in 2 ms
+2023-01-12 00:39:04 [INFO ] [SpringApplicationShutdownHook] tainerEntityManagerFactoryBean: Closing JPA EntityManagerFactory for persistence unit 'default'

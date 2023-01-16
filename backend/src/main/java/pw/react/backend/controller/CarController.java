@@ -20,10 +20,8 @@ import pw.react.backend.dao.CarRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.CarImage;
 import pw.react.backend.models.Car;
-import pw.react.backend.models.CompanyLogo;
 import pw.react.backend.services.CarService;
 import pw.react.backend.services.ImageService;
-import pw.react.backend.services.LogoService;
 import pw.react.backend.web.CarDto;
 import pw.react.backend.web.UploadFileResponse;
 
@@ -61,7 +59,7 @@ public class CarController {
         logHeaders(headers, log);
         CarDto result = repository.findById(carId)
                 .map(CarDto::valueFrom)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Car with %d does not exist", carId)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Car with %s does not exist", carId)));
         return ResponseEntity.ok(result);
     }
 

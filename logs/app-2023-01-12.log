@@ -1,0 +1,71 @@
+2023-01-12 00:30:33 [INFO ] [restartedMain] act.backend.BackendApplication: Starting BackendApplication using Java 18.0.1.1 on ASUS-TUF-SZYM with PID 19180 (C:\Users\saqua\Desktop\React\Carly\backend\target\classes started by saqua in C:\Users\saqua\Desktop\React\Carly)
+2023-01-12 00:30:33 [DEBUG] [restartedMain] act.backend.BackendApplication: Running with Spring Boot v2.7.6, Spring v5.3.24
+2023-01-12 00:30:33 [INFO ] [restartedMain] act.backend.BackendApplication: No active profile set, falling back to 1 default profile: "default"
+2023-01-12 00:31:10 [INFO ] [restartedMain] act.backend.BackendApplication: Starting BackendApplication using Java 18.0.1.1 on ASUS-TUF-SZYM with PID 25072 (C:\Users\saqua\Desktop\React\Carly\backend\target\classes started by saqua in C:\Users\saqua\Desktop\React\Carly)
+2023-01-12 00:31:10 [DEBUG] [restartedMain] act.backend.BackendApplication: Running with Spring Boot v2.7.6, Spring v5.3.24
+2023-01-12 00:31:10 [INFO ] [restartedMain] act.backend.BackendApplication: The following 2 profiles are active: "mysql-dev", "jwt"
+2023-01-12 00:31:12 [DEBUG] [restartedMain] end.security.configs.JwtConfig: ************** JWT properties **************
+2023-01-12 00:31:12 [DEBUG] [restartedMain] end.security.configs.JwtConfig: JWT secret: 4e788bf0-1ae7-473a-a0f9-f59778e5b758
+2023-01-12 00:31:12 [DEBUG] [restartedMain] end.security.configs.JwtConfig: JWT expirationMs: 86400000
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: ************** Environment variables **************
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [USERDOMAIN_ROAMINGPROFILE] : [ASUS-TUF-SZYM]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PROCESSOR_LEVEL] : [23]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [SESSIONNAME] : [Console]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ALLUSERSPROFILE] : [C:\ProgramData]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PROCESSOR_ARCHITECTURE] : [AMD64]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PSModulePath] : [C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\PowerShell\Modules\]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [SystemDrive] : [C:]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [MAVEN_HOME] : [C:\Program Files\Maven\apache-maven-3.8.6]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ACSvcPort] : [17532]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [USERNAME] : [saqua]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ProgramFiles(x86)] : [C:\Program Files (x86)]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PATHEXT] : [.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [DriverData] : [C:\Windows\System32\Drivers\DriverData]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [OneDriveConsumer] : [C:\Users\saqua\OneDrive]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [IntelliJ IDEA Community Edition] : [C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2020.2.2\bin;]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ProgramData] : [C:\ProgramData]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ProgramW6432] : [C:\Program Files]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [HOMEPATH] : [\Users\saqua]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PROCESSOR_IDENTIFIER] : [AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ProgramFiles] : [C:\Program Files]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PUBLIC] : [C:\Users\Public]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [windir] : [C:\WINDOWS]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [=::] : [::\]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [LOCALAPPDATA] : [C:\Users\saqua\AppData\Local]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ChocolateyLastPathUpdate] : [132987719553673185]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [USERDOMAIN] : [ASUS-TUF-SZYM]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [LOGONSERVER] : [\\ASUS-TUF-SZYM]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [RlsSvcPort] : [22112]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [OneDrive] : [C:\Users\saqua\OneDrive]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [VS160ENTCOMNTOOLS] : [C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [APPDATA] : [C:\Users\saqua\AppData\Roaming]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ChocolateyInstall] : [C:\ProgramData\chocolatey]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [VBOX_MSI_INSTALL_PATH] : [C:\Program Files\Oracle\VirtualBox\]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [CommonProgramFiles] : [C:\Program Files\Common Files]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [Path] : [C:\Python310\Scripts\;C:\Python310\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\MATLAB\R2021b\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Users\saqua\AppData\Roaming\Python\Python310\Scripts;C:\Program Files\GitHub CLI\;C:\Program Files\Maven\apache-maven-3.8.6\bin;C:\Users\saqua\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\saqua\AppData\Local\Programs\Python\Python39\;C:\Users\saqua\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2020.2.2\bin;;C:\Users\saqua\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\saqua\.dotnet\tools;C:\Program Files\Azure Data Studio\bin;C:\Users\saqua\AppData\Roaming\npm;C:\Users\saqua\AppData\Local\GitHubDesktop\bin;C:\Users\saqua\AppData\Local\Programs\MiKTeX\miktex\bin\x64\;C:\Program Files\JetBrains\PyCharm 2022.3.1\bin;]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PyCharm] : [C:\Program Files\JetBrains\PyCharm 2022.3.1\bin;]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [OS] : [Windows_NT]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [COMPUTERNAME] : [ASUS-TUF-SZYM]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [PROCESSOR_REVISION] : [6001]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [CommonProgramW6432] : [C:\Program Files\Common Files]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [ComSpec] : [C:\WINDOWS\system32\cmd.exe]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [RTOOLS42_HOME] : [C:\rtools42]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [SystemRoot] : [C:\WINDOWS]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [TEMP] : [C:\Users\saqua\AppData\Local\Temp]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [HOMEDRIVE] : [C:]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [USERPROFILE] : [C:\Users\saqua]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [TMP] : [C:\Users\saqua\AppData\Local\Temp]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [CommonProgramFiles(x86)] : [C:\Program Files (x86)\Common Files]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [NUMBER_OF_PROCESSORS] : [16]
+2023-01-12 00:31:13 [DEBUG] [restartedMain] ct.backend.services.MainConfig: [IDEA_INITIAL_DIRECTORY] : [C:\Program Files\JetBrains\IntelliJ IDEA 2022.1\bin]
+2023-01-12 00:31:15 [DEBUG] [restartedMain] urity.filters.JwtRequestFilter: Filter 'jwtRequestFilter' configured for use
+2023-01-12 00:31:15 [INFO ] [restartedMain] act.backend.BackendApplication: Started BackendApplication in 5.029 seconds (JVM running for 5.84)
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-1] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-1] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-2] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-1] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-4] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-3] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-3] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-1] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String
+2023-01-12 00:32:14 [WARN ] [XNIO-1 task-3] urity.filters.JwtRequestFilter: JWT Token does not begin with Bearer String

@@ -89,8 +89,8 @@ public class MainConfig {
     }
 
     @Bean
-    public BookingService bookingMainService() {
-        return new BookingMainService();
+    public BookingService bookingMainService(BookingRepository bookingRepository) {
+        return new BookingMainService(bookingRepository);
     }
 
     @Bean
