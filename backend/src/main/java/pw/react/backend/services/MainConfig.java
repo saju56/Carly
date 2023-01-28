@@ -46,11 +46,6 @@ public class MainConfig {
     }
 
     @Bean
-    public HttpService httpService(RestTemplate restTemplate) {
-        return new HttpBaseService(restTemplate);
-    }
-
-    @Bean
     public UserService userService(UserRepository userRepository) {
         return new UserMainService(userRepository);
     }
