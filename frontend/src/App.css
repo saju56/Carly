@@ -1,5 +1,5 @@
-.App {
-  width: 80vw;
+/*.App {
+  width: 60vw;
   height: 80vh;
   background-color: white;
   filter: drop-shadow(291px 383px 192px rgba(18, 10, 41, 0.03)) 
@@ -9,4 +9,31 @@
     drop-shadow(0px 0px 0px rgba(18, 10, 41, 0.2));
   border-radius: 12px;
   background: #DADEEA;
+}
+*/
+.AppWrapper {
+  width: 80vw;
+  height: 90vh;
+  background-color: white;
+  filter: drop-shadow(291px 383px 192px rgba(18, 10, 41, 0.03)) 
+    drop-shadow(164px 215px 162px rgba(18, 10, 41, 0.1)) 
+    drop-shadow(73px 96px 120px rgba(18, 10, 41, 0.17)) 
+    drop-shadow(18px 24px 66px rgba(18, 10, 41, 0.2)) 
+    drop-shadow(0px 0px 0px rgba(18, 10, 41, 0.2));
+  border-radius: 12px;
+  background: #DADEEA;
+  overflow: hidden;
+  display: flex;
+}
+
+.App {
+  flex-grow: 100;
+  height: 90vw;
+  float:left; /* add this */
+}
+
+.Layout {
+  width: 150px;
+  height: 90vw;
+  float: left; /* add this */
 }
