@@ -5,13 +5,22 @@ import org.slf4j.LoggerFactory;
 import pw.react.backend.dao.CarRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Car;
+import pw.react.backend.web.CarDto;
 
+import java.util.List;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 public class CarMainService implements CarService{
 
     private final Logger logger = LoggerFactory.getLogger(CarMainService.class);
-    private CarRepository repository;
+    private final CarRepository repository;
+
+    public CarMainService(CarRepository carRepository) {
+        this.repository = carRepository;
+    }
+
     @Override
     public Car updateCar(UUID id, Car updatedCar) throws ResourceNotFoundException {
         if (repository.existsById(id)) {
@@ -25,12 +34,39 @@ public class CarMainService implements CarService{
 
     @Override
     public boolean deleteCar(UUID id) {
-        boolean result = false;
-        if(repository.existsById(id)) {
-            repository.deleteById(id);
-            logger.info("Car with id {} deleted.", id);
-            result = true;
+        if (!repository.existsById(id)) {
+            return false;
         }
-        return result;
+        repository.deleteById(id);
+        logger.info("Car with id {} deleted.", id);
+        return true;
+    }
+
+    @Override
+    public List<CarDto> getAllCars() {
+        return repository.findAll()
+                .stream()
+                .map(CarDto::valueFrom)
+                .collect(toList());
+    }
+
+    @Override
+    public List<CarDto> saveManyCars(List<Car> cars) {
+        return repository.saveAll(cars)
+                .stream()
+                .map(CarDto::valueFrom)
+                .toList();
+    }
+
+    @Override
+    public CarDto getCarById(UUID id) throws ResourceNotFoundException {
+        return repository.findById(id)
+                .map(CarDto::valueFrom)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Car with %s does not exist", id)));
+    }
+
+    @Override
+    public CarDto saveCar(Car car) {
+        return CarDto.valueFrom(repository.save(car));
     }
 }

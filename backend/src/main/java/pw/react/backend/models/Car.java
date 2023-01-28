@@ -1,16 +1,20 @@
 package pw.react.backend.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "car")
 public class Car {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(columnDefinition = "BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))")
     private UUID id;
     @Column
     private String brand;
@@ -27,7 +31,7 @@ public class Car {
     @Column(name = "body_type")
     private String bodyType;
     @Column
-    private String city
+    private String city;
     @Column
     private long vin;
     @Column(name = "fuel_type")

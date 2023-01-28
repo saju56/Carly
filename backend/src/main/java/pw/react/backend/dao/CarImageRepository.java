@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
-public interface CarImageRepository extends JpaRepository<CarImage, String> {
+public interface CarImageRepository extends JpaRepository<CarImage, UUID> {
     Optional<CarImage> findByCarId(UUID carId);
     void deleteByCarId(UUID carId);
 }

@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @Profile({"jwt"})
 public class JwtAuthenticationController {
 
-    public static final String AUTHENTICATION_PATH = "/auth";
+    public static final String AUTHENTICATION_PATH = "/authenticate";
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
@@ -34,7 +34,7 @@ public class JwtAuthenticationController {
         this.userDetailsService = userDetailsService;
     }
 
-    @PostMapping(path = "/login")
+    @PostMapping(path = "")
     public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest,
                                                        HttpServletRequest request) throws Exception {
 

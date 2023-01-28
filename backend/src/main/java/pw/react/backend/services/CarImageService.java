@@ -8,7 +8,6 @@ import pw.react.backend.dao.CarImageRepository;
 import pw.react.backend.exceptions.InvalidFileException;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.CarImage;
-import pw.react.backend.models.CompanyLogo;
 
 import java.io.IOException;
 import java.util.UUID;

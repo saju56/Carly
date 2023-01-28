@@ -5,7 +5,8 @@ import pw.react.backend.models.User;
 import javax.validation.constraints.Email;
 import java.util.UUID;
 
-public record UserDto(UUID id, String username, String name, String surname, boolean isAdmin, String password, @Email String email) {
+public record UserDto(UUID id, String username, String name, String surname, boolean isAdmin, String password,
+                      @Email String email) {
 
     public static UserDto valueFrom(User user) {
         return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getSurname(), user.isAdmin(),

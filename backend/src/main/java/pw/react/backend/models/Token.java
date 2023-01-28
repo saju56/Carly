@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "token")
 public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

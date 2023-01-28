@@ -13,7 +13,7 @@ public class CarImage {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    private UUID id;
     private String fileName;
     private String fileType;
     private UUID carId;
@@ -30,11 +30,11 @@ public class CarImage {
         this.data = data;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
