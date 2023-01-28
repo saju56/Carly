@@ -14,6 +14,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 export default function LoginView() {
   return (
     <View style={styles.container}>
+<<<<<<< HEAD
       <Text style={styles.logo}>carly</Text>
       <View style={styles.usernameInput}>
         <Ionicons name="person-outline" size={40} color="black" />
@@ -30,6 +31,9 @@ export default function LoginView() {
       <Pressable style={styles.button}>
         <Text style={styles.loginText}>login</Text>
       </Pressable>
+=======
+      <Button title="Pick an image from camera roll" />
+>>>>>>> 46a6af9ccc734d4410bb282dad8e007324469f7d
     </View>
   );
 }

@@ -1,10 +1,13 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import LoginView from './views/LoginView';
 
 export default function App() {
   return (
-    <LoginView/>
+    <View style={styles.container}>
+      <Text></Text>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
@@ -16,3 +19,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
