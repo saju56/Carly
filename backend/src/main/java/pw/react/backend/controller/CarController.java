@@ -18,8 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pw.react.backend.dao.CarRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
-import pw.react.backend.models.CarImage;
 import pw.react.backend.models.Car;
+import pw.react.backend.models.CarImage;
 import pw.react.backend.services.CarService;
 import pw.react.backend.services.ImageService;
 import pw.react.backend.web.CarDto;
@@ -31,11 +31,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
-import static pw.react.backend.controller.HeadersLogger.logHeaders;
 
 @RestController
 @RequestMapping(path = CarController.CARS_PATH)
-public class CarController {
+public class CarController extends AbstractController {
 
     public static final String CARS_PATH = "/logic/api/cars";
 
