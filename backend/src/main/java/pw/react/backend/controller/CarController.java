@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pw.react.backend.dao.CarRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Car;
 import pw.react.backend.models.CarImage;
@@ -30,8 +28,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
 @RestController
 @RequestMapping(path = CarController.CARS_PATH)
 public class CarController extends AbstractController {
@@ -39,26 +35,20 @@ public class CarController extends AbstractController {
     public static final String CARS_PATH = "/logic/api/cars";
 
     private static final Logger log = LoggerFactory.getLogger(CarController.class);
+
     private final CarService carService;
-    private final CarRepository repository;
+    private final ImageService carImageService;
 
-    private ImageService carImageService;
-
-    public CarController(CarRepository carRepository, CarService carService) {
-        this.repository = carRepository;
+    public CarController(CarService carService, ImageService carImageService) {
         this.carService = carService;
-    }
-    @Autowired
-    public void setCarImageService(ImageService carImageService) {
         this.carImageService = carImageService;
     }
 
     @GetMapping(path = "/{carId}")
-    public ResponseEntity<CarDto> getCar(@RequestHeader HttpHeaders headers, @PathVariable UUID carId) {
+    public ResponseEntity<CarDto> getCar(@RequestHeader HttpHeaders headers, @PathVariable UUID carId)
+            throws ResourceNotFoundException {
         logHeaders(headers, log);
-        CarDto result = repository.findById(carId)
-                .map(CarDto::valueFrom)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Car with %s does not exist", carId)));
+        CarDto result = carService.getCarById(carId);
         return ResponseEntity.ok(result);
     }
 
@@ -66,18 +56,15 @@ public class CarController extends AbstractController {
     public ResponseEntity<Collection<CarDto>> createCar(@RequestHeader HttpHeaders headers,
                                                                   @Valid @RequestBody List<CarDto> cars) {
         logHeaders(headers, log);
-        List<Car> createdCar = cars.stream().map(CarDto::convertToCar).toList();
-        List<CarDto> result = repository.saveAll(createdCar)
-                .stream()
-                .map(CarDto::valueFrom)
-                .toList();
+        List<Car> createdCars = cars.stream().map(CarDto::convertToCar).toList();
+        List<CarDto> result = carService.saveManyCars(createdCars);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping(path = "")
     public ResponseEntity<Collection<CarDto>> getAllCars(@RequestHeader HttpHeaders headers) {
         logHeaders(headers, log);
-        return ResponseEntity.ok(repository.findAll().stream().map(CarDto::valueFrom).collect(toList()));
+        return ResponseEntity.ok(carService.getAllCars());
     }
 
     @PutMapping(path = "/{carId}")
