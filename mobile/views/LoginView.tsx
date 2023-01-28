@@ -10,8 +10,11 @@ import {
   Pressable,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginView() {
+
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>carly</Text>
@@ -27,7 +30,9 @@ export default function LoginView() {
           style={styles.textField}
         />
       </View>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={() =>
+        navigation.navigate('AdminMenu')
+      }>
         <Text style={styles.loginText}>login</Text>
       </Pressable>
     </View>
