@@ -9,14 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@ant-design/icons": "^5.0.1",
-    "@expo-google-fonts/montserrat": "^0.2.2",
-    "@expo/vector-icons": "^13.0.0",
-    "expo": "~47.0.12",
     "expo-app-loading": "^2.1.1",
-    "expo-font": "^11.0.1",
-=======
     "@expo-google-fonts/inter": "^0.2.2",
     "@expo-google-fonts/montserrat": "^0.2.2",
     "@expo/vector-icons": "^13.0.0",
@@ -24,7 +18,6 @@
     "@react-navigation/native": "^6.1.2",
     "expo": "~47.0.12",
     "expo-font": "~11.0.1",
->>>>>>> 46a6af9ccc734d4410bb282dad8e007324469f7d
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",

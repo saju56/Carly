@@ -6,24 +6,22 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Montserrat_400Regular, useFonts } from '@expo-google-fonts/montserrat';
 
 export default function AdminBookingsView() {
-    const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
   const [bookingsCount, setCountriesCount] = useState(0)
 
 //   admin so all bookings
-  const getCountries = async () => {
+  const getBookings = async () => {
     try {
       setLoading(true);
-      let response = null;
-
-      if (searchText.length >= 3) 
-        response = await fetch('https://restcountries.com/v2/name/' + encodeURI(searchText));
-      else
-        response = await fetch('https://restcountries.com/v2/all?fields=name,alpha2Code,alpha3Code');
-      
-      let json = await response.json();
-      setCountriesCount(Object.keys(json).length)
-      setCountries(json);
+      let token = fetch()
+      let response = await fetch('http://localhost:8080/logic/api/bookings', {
+        method : 'GET',
+        headers: {
+            Authorization: `Bearer {token}`,
+            'Content-Type': 'application/json'
+        }
+      })
     } catch(error){
       console.error(error);
     } finally {
