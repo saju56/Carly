@@ -46,23 +46,8 @@ public class MainConfig {
     }
 
     @Bean
-    public HttpService httpService(RestTemplate restTemplate) {
-        return new HttpBaseService(restTemplate);
-    }
-
-    @Bean
     public UserService userService(UserRepository userRepository) {
         return new UserMainService(userRepository);
-    }
-
-    @Bean
-    public CompanyService companyMainService(CompanyRepository companyRepository) {
-        return new CompanyMainService(companyRepository);
-    }
-
-    @Bean
-    public LogoService logoService(CompanyLogoRepository companyLogoRepository) {
-        return new CompanyLogoService(companyLogoRepository);
     }
 
     @Bean
