@@ -27,7 +27,7 @@ public class Car {
     @Column(name = "body_type")
     private String bodyType;
     @Column
-    private String city
+    private String city;
     @Column
     private long vin;
     @Column(name = "fuel_type")
