@@ -24,7 +24,7 @@ export default function AdminCarsView() {
   const [cars, setCars] = useState<Car[]>([]);
 
   const getCars = async () => {
-    const response = await fetch("http://192.168.0.213:8080/logic/api/cars");
+    const response = await fetch("http://localhost:8080/logic/api/cars");
     const data = await response.json();
     setCars(data);
   };
