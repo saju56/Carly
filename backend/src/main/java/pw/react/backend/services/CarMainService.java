@@ -34,13 +34,12 @@ public class CarMainService implements CarService{
 
     @Override
     public boolean deleteCar(UUID id) {
-        boolean result = false;
-        if(repository.existsById(id)) {
-            repository.deleteById(id);
-            logger.info("Car with id {} deleted.", id);
-            result = true;
+        if (!repository.existsById(id)) {
+            return false;
         }
-        return result;
+        repository.deleteById(id);
+        logger.info("Car with id {} deleted.", id);
+        return true;
     }
 
     @Override

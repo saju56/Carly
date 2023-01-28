@@ -62,7 +62,7 @@ public class WebJwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 // make sure we use stateless session; session won't be used to store user's state.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/auth/login").permitAll()
+                .authorizeRequests().antMatchers("/authenticate").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .antMatchers( "/v3/api-docs/**", "/swagger-ui/**").permitAll()

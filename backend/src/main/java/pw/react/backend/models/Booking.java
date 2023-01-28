@@ -1,5 +1,7 @@
 package pw.react.backend.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -8,8 +10,12 @@ import java.util.UUID;
 @Table(name = "booking")
 public class Booking {
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(columnDefinition = "BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))")
     private UUID id;
     @Column
     private UUID userId;
