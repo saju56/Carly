@@ -13,28 +13,30 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 
 export default function LoginView() {
-
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>carly</Text>
-      <View style={styles.usernameInput}>
-        <Ionicons name="person-outline" size={40} color="black" />
-        <TextInput placeholder="username" style={styles.textField} />
+      <View>
+        <View style={styles.usernameInput}>
+          <Ionicons name="person-outline" size={30} color="black"/>
+          <TextInput placeholder="username" style={styles.textField} />
+        </View>
+        <View style={styles.usernameInput}>
+          <Ionicons name="ios-lock-closed-outline" size={30} color="black"/>
+          <TextInput
+            placeholder="password"
+            secureTextEntry={true}
+            style={styles.textField}
+          />
+        </View>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate("AdminMenu")}
+        >
+          <Text style={styles.loginText}>login</Text>
+        </Pressable>
       </View>
-      <View style={styles.usernameInput}>
-        <Ionicons name="ios-lock-closed-outline" size={40} color="black" />
-        <TextInput
-          placeholder="password"
-          secureTextEntry={true}
-          style={styles.textField}
-        />
-      </View>
-      <Pressable style={styles.button} onPress={() =>
-        navigation.navigate('AdminMenu')
-      }>
-        <Text style={styles.loginText}>login</Text>
-      </Pressable>
     </View>
   );
 }
@@ -44,16 +46,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#DADEEA",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   usernameInput: {
     height: 60,
-    width: 300,
+    width: 320,
     margin: 12,
     padding: 10,
-    borderRadius: 12,
+    borderRadius: 50,
     backgroundColor: "white",
     flexDirection: "row",
+    alignItems:"center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -67,6 +70,7 @@ const styles = StyleSheet.create({
   textField: {
     fontSize: 25,
     marginLeft: 10,
+    width: 220,
   },
   logo: {
     fontSize: 64,
@@ -75,13 +79,14 @@ const styles = StyleSheet.create({
     textShadowColor: "white",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
+    marginBottom: "20%",
   },
   button: {
     height: 60,
-    width: 300,
+    width: 320,
     margin: 12,
     padding: 10,
-    borderRadius: 12,
+    borderRadius: 50,
     backgroundColor: "lightblue",
     alignItems: "center",
     justifyContent: "center",
@@ -98,5 +103,6 @@ const styles = StyleSheet.create({
   loginText: {
     letterSpacing: 4,
     fontSize: 25,
+    fontWeight: '600'
   },
 });

@@ -2,22 +2,25 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import LoginView from "./views/LoginView";
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AdminMenuView from "./views/AdminMenuView";
+import AdminBookingsView from "./views/AdminBookingsView";
+import AdminCarsView from "./views/AdminCarsView";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{
-    headerShown: false
-  }}>
-        <Stack.Screen
-          name="Login"
-          component={LoginView}
-        />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Login" component={LoginView} />
         <Stack.Screen name="AdminMenu" component={AdminMenuView} />
+        <Stack.Screen name="AdminCarsView" component={AdminCarsView} />
+        <Stack.Screen name="AdminBookingsView" component={AdminBookingsView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
