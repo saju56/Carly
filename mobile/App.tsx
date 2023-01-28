@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import LoginView from "./views/LoginView";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AdminMenuView from "./views/AdminMenuView";
+import AdminBookingsView from "./views/AdminBookingsView";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,11 +14,12 @@ export default function App() {
       <Stack.Navigator screenOptions={{
     headerShown: false
   }}>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Login"
           component={LoginView}
         />
-        <Stack.Screen name="AdminMenu" component={AdminMenuView} />
+        <Stack.Screen name="AdminMenu" component={AdminMenuView} /> */}
+        <Stack.Screen name="AdminBookings" component={AdminBookingsView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

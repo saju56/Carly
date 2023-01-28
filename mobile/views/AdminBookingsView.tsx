@@ -1,27 +1,38 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react'
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Button, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Montserrat_400Regular, useFonts } from '@expo-google-fonts/montserrat';
 
+type Booking = {
+    id: String,
+    carId: String,
+    endDate: String,
+    startDate: String,
+    userId: String
+}
+
+async function request<TResponse>( url: string, config: RequestInit = {} ): Promise<TResponse> {
+    return await fetch(url, config)
+      .then((response) => response.json())
+      .then((data) => data as TResponse);
+}
+
+
 export default function AdminBookingsView() {
   const [isLoading, setLoading] = useState(true);
-  const [bookings, setBookings] = useState([]);
-  const [bookingsCount, setCountriesCount] = useState(0)
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookingsCount, setBookingsCount] = useState(0)
 
 //   admin so all bookings
   const getBookings = async () => {
     try {
       setLoading(true);
-      let token = fetch()
-      let response = await fetch('http://localhost:8080/logic/api/bookings', {
-        method : 'GET',
-        headers: {
-            Authorization: `Bearer {token}`,
-            'Content-Type': 'application/json'
-        }
-      })
+      let response : Booking[] | null = []
+      await request<Booking[]>('http://192.168.1.10:8080/logic/api/bookings').then((bookings) => (response = bookings))
+      setBookingsCount(Object.keys(response).length)
+      setBookings(response)
     } catch(error){
       console.error(error);
     } finally {
@@ -29,23 +40,37 @@ export default function AdminBookingsView() {
     }
   }
   
+  useEffect(() => {
+    getBookings();
+  }, []);
+
     return (
     <View style={styles.container}>
-      <Text style={styles.header}>current</Text>
-      <Text style={styles.headerBold}>bookings</Text>
+        <View style={styles.header}>
+            <View>
+                <Text style={styles.headerText}>current</Text>
+                <Text style={styles.headerTextBold}>bookings</Text>
+            </View>
+            <View>
+                <Pressable></Pressable>
+            </View>
+        </View>
+      <Text style={styles.infoText}>bookings found: {bookingsCount}</Text>
       <Button title='home'></Button>
       <FlatList
-            data={countries}
+            data={bookings}
             renderItem={({item}) => <>
-              <Text style={styles.content}>{"[" + item.alpha3Code + "] " + item.name}</Text>
-              <RoundedButton style={styles.button} onPress={() => navigation.navigate('CountryDetailsScreen', item.alpha2Code)} centerText="Go to details"/>
+              <Text style={styles.container}>Booking id: {item.id}</Text>
+              <Text style={styles.container}>Car id: {item.carId}</Text>
+              <Text style={styles.container}>End date: {item.endDate}</Text>
+              <Text style={styles.container}>Start date: {item.startDate}</Text>
+              <Text style={styles.container}>User id: {item.userId}</Text>
+              
             </>}
-            keyExtractor={item => item.alpha2Code}
             refreshControl={
-              <RefreshControl refreshing={isLoading} onRefresh={getCountries} />
+              <RefreshControl refreshing={isLoading} onRefresh={getBookings} />
             }
             refreshing={isLoading}
-            ItemSeparatorComponent={Separator}
             maxToRenderPerBatch={7}
             initialNumToRender={15}
           />
@@ -61,11 +86,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%'
   },
-  header:{
+  headerText:{
     fontSize: 40,
   },
-  headerBold:{
+  headerTextBold:{
     fontSize: 40,
     fontWeight: 'bold',
+  },
+  infoText: {
+    fontSize: 14
+  },
+  header: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    flexDirection: 'row',
+    alignItems: 'stretch'
   }
 });
