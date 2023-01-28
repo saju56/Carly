@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, Button, Image } from "react-native";
 export default function LoginView() {
   return (
     <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Button title="Pick an image from camera roll" />
     </View>
   );
 }
