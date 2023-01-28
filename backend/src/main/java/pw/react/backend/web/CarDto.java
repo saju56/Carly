@@ -1,8 +1,6 @@
 package pw.react.backend.web;
 
 import pw.react.backend.models.Car;
-import pw.react.backend.models.Company;
-import pw.react.backend.models.User;
 
 import java.util.UUID;
 

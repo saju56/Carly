@@ -1,9 +1,6 @@
 package pw.react.backend.models;
 
 import javax.persistence.*;
-import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -27,7 +24,7 @@ public class Car {
     @Column(name = "body_type")
     private String bodyType;
     @Column
-    private String city
+    private String city;
     @Column
     private long vin;
     @Column(name = "fuel_type")
