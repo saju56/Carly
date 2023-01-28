@@ -19,13 +19,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
-import static pw.react.backend.controller.HeadersLogger.logHeaders;
 import static pw.react.backend.web.BookingDto.convertToBooking;
 import static pw.react.backend.web.BookingDto.valueFrom;
 
 @RestController
 @RequestMapping(path = BookingController.BOOKINGS_PATH)
-public class BookingController {
+public class BookingController extends AbstractController {
 
     public static final String BOOKINGS_PATH = "/logic/api/bookings";
 

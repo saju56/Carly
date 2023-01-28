@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static java.util.stream.Collectors.joining;
 
-public class HeadersLogger {
+public class AbstractController {
 
-    public static void logHeaders(@RequestHeader HttpHeaders headers, Logger logger) {
+    protected void logHeaders(@RequestHeader HttpHeaders headers, Logger logger) {
         logger.info("Controller request headers {}",
                 headers.entrySet()
                         .stream()

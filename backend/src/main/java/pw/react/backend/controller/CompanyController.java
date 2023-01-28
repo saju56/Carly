@@ -30,11 +30,10 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static pw.react.backend.controller.HeadersLogger.logHeaders;
 
 @RestController
 @RequestMapping(path = CompanyController.COMPANIES_PATH)
-public class CompanyController {
+public class CompanyController extends AbstractController {
 
     private static final Logger log = LoggerFactory.getLogger(CompanyController.class);
 
