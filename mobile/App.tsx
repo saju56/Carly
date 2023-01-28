@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import LoginView from "./views/LoginView";
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AdminMenuView from "./views/AdminMenuView";
 import AdminBookingsView from "./views/AdminBookingsView";
 
