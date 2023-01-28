@@ -79,8 +79,8 @@ public class MainConfig {
     }
 
     @Bean
-    public CarService carMainService() {
-        return new CarMainService();
+    public CarService carMainService(CarRepository carRepository) {
+        return new CarMainService(carRepository);
     }
 
     private String[] getCorsUrls() {

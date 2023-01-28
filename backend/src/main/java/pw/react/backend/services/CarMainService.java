@@ -15,7 +15,11 @@ import static java.util.stream.Collectors.toList;
 public class CarMainService implements CarService{
 
     private final Logger logger = LoggerFactory.getLogger(CarMainService.class);
-    private CarRepository repository;
+    private final CarRepository repository;
+
+    public CarMainService(CarRepository carRepository) {
+        this.repository = carRepository;
+    }
 
     @Override
     public Car updateCar(UUID id, Car updatedCar) throws ResourceNotFoundException {
