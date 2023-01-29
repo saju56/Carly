@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useContext, useEffect, useState } from "react";
-import { Context, Token } from "../App";
-import { RootStackParamList } from "../App";
+
 import {
   StyleSheet,
   TextInput,
@@ -13,6 +12,10 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { UserAttributes } from "../App";
+import { Token } from "../App";
+import { RootStackParamList } from "../App";
 
 type LoginViewProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
@@ -21,19 +24,26 @@ type Credentials = {
   password: String
 }
 
-type UserAttributes = {
-  token: Token,
-  isAdmin: Boolean
+type Validations = {
+  unRequire: Boolean,
+  pwRequire: Boolean
 }
 
 export default function LoginView(props: LoginViewProps) {
-  const [credentials, setCredentials] = useState<Credentials>({ username : "", password : "" })
+  const [credentials, setCredentials] = useState<Credentials>({ username : "init", password : "init" })
   const [credInvalid, setCredInvalid] = useState(false)
-  const [attributes, setAttributes] = useState<UserAttributes>({ token: { jwttoken : "" }, isAdmin: false})
+  const [attributes, setAttributes] = useState<UserAttributes>({ token: { jwttoken : "" }, isAdmin: true, isLoggedIn: false})
+  const [validator, setValidator] = useState<Validations>({ unRequire: false, pwRequire: false })
+
+  useEffect(()=>{
+    if (credentials.username === "")
+      setValidator({ ...validator, unRequire: true })
+    else
+      setValidator({ ...validator, unRequire: false })
+  }, [credentials])
 
   const handleLogin = async () => {
-    setCredInvalid(true)
-    await fetch('http://192.168.1.10:8080/authenticate', {
+    await fetch('https://carly-backend-app.azurewebsites.net/authenticate', {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: {
@@ -41,26 +51,26 @@ export default function LoginView(props: LoginViewProps) {
       },
     }).then((response) => {
       if (response.ok)
-          return response.json()
+        return response.json()
       else{
         throw new Error("ERROR " + response.status)
       }
     }).then((token : Token) => {
-      console.log(token)
-      setAttributes({ token : token, isAdmin: false})
       console.log("Success logging in.")
+      console.log(token.jwttoken)
+      setAttributes({ token : token, isAdmin: attributes.isAdmin, isLoggedIn: true})
       setCredInvalid(false)
     }).catch((e) => {
-      setCredInvalid(true)
       console.log("Error when trying to log in: " + e)
+      setCredInvalid(true)
+      setAttributes({ ...attributes, isLoggedIn: false})
     })
   };
 
   useEffect(() => {
-    if (!credInvalid) {
-      props.navigation.navigate('Menu', { token: attributes.token, isAdmin: attributes.isAdmin })
-    }
-  }, [credInvalid])
+    if (!credInvalid && attributes.isLoggedIn)
+      props.navigation.navigate('Menu', attributes)
+  }, [credInvalid, attributes.isLoggedIn])
 
   return (
     <View style={styles.container}>
@@ -68,24 +78,27 @@ export default function LoginView(props: LoginViewProps) {
       <View>
         <View style={styles.usernameInput}>
           <Ionicons name="person-outline" size={30} color="black"/>
-          <TextInput placeholder="username" style={styles.textField} onChangeText={(username) => setCredentials({
-            username : username,
-            password: credentials.password
-            })}/>
+          <TextInput placeholder="username" style={styles.textField} onChangeText={(username) => {
+            setCredentials({
+              username: username,
+              password: credentials.password
+            })
+          }}/>
         </View>
+        { validator.unRequire ? <Text style={styles.textFailure}>Username field cannot be empty.</Text> : <></> }
         <View style={styles.usernameInput}>
           <Ionicons name="ios-lock-closed-outline" size={30} color="black"/>
-          <TextInput
-            placeholder="password"
-            secureTextEntry={true}
-            onChangeText={(password) => setCredentials({
-              username : credentials.username,
-              password: password
-              })}
-            style={styles.textField}
-          />
+          <TextInput placeholder="password" secureTextEntry={true} style={styles.textField} onChangeText={(password) => {
+            setCredentials({
+            username: credentials.username,
+            password: password
+            })
+          }}/>
         </View>
-        { credInvalid ? <Text>{attributes.token.jwttoken}</Text> : <></> }
+        { validator.pwRequire ? <Text style={styles.textFailure}>Password field cannot be empty.</Text> : <></> }
+        {
+          attributes.isLoggedIn ? <Text style={styles.textSuccess}>Success!</Text> : ( credInvalid ? <Text style={styles.textFailure}>Invalid credentials. Try again.</Text> : <></> ) 
+        }
         <Pressable
           style={styles.button}
           onPress={handleLogin}
@@ -120,7 +133,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   textField: {
@@ -157,8 +169,17 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   loginText: {
-    letterSpacing: 4,
     fontSize: 25,
     fontWeight: '600'
+  },
+  textFailure: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: 'red'
+  },
+  textSuccess: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: 'green'
   },
 });
