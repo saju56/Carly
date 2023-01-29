@@ -12,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export interface AddCarFormProps {
   saveCar: (car: Car) => void;
-  hideForm: () => void;
 }
 
 const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
@@ -59,7 +58,7 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
       isNumberValid(addedCar.pricePerDay)
     ) {
       //add car
-      //props.saveCar(addedCar);
+      props.saveCar(addedCar);
 
       setOpen(false);
     }

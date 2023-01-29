@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Car} from "../model/Car";
 import Loader from "../utils/Loader";
 import { updateCommaList } from 'typescript';
 import { Box, Button, Card, CardMedia, Grid, makeStyles, styled, TextField, Typography } from '@mui/material';
+import { properties } from '../resources/properties';
+import { Context } from '../App';
 
 
 
@@ -23,33 +25,67 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     const [deleting, setDeleting] = useState(false);
     const [editing, setEditing] = useState(false);
     const [currentCar, setCurrentCar] = useState(props.car);
+    const { token, setToken } = useContext(Context);
+
     const theme = {
         spacing: 8,
       }
     
     const editHandle = () => {
         setEditing(true);
-        console.log(currentCar)
     }
 
     const cancelHandle = () => {
         setEditing(false);
-        console.log(currentCar);
 
     }
 
-    const saveHandle = () => {
-        
+    const saveHandle = async(id: String) => {
+        await fetch(`${properties.url}/logic/api/cars/${id}`, {
+            method: "PUT",
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          })
+            .then((response) => {
+              if (response.ok) return response.json();
+              else {
+                throw new Error("ERROR " + response.status);
+              }
+            })
+            .then(() => {
+              props.updateList();
+              console.log("Success editing car.");
+            })
+            .catch((e) => {
+              console.log("Error when trying to edit car: " + e);
+            })
+            .finally(()=>
+              setEditing(false));
     }
 
-    const deleteHandle = () => {
-        setDeleting(true);
-       // deleteCar(props.car.id)
-       //     .then(()=>props.updateList())
-        //    .catch(e=>console.error(JSON.stringify(e)))
-         //   .finally(()=>setDeleting(false))
-    }
     
+    const deleteHandle = async (id: String) => {
+        setDeleting(true);
+            await fetch(`${properties.url}/logic/api/cars/${id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                //'Content-type': 'application/json; charset=UTF-8',
+              },
+            }).then((response) => {
+              if (response.ok) return response.json()
+              else throw new Error("ERROR " + response.status)
+            }).then(() => {
+              console.log("Success deleting car.")
+              props.updateList();
+            }).catch((e) => {
+              console.log("Error when trying to deleting car: " + e)
+            }).finally(()=>{
+                setDeleting(false);
+            })
+    }
+
     return (
         <Loader loading={deleting} label="Deleting">
             {editing ? 
@@ -249,7 +285,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                         disabled={false}
                                         size="small"
                                         variant="outlined"
-                                        onClick={saveHandle}
+                                        onClick={()=>saveHandle(props.car.id)}
                                         >
                                         save
                                     </Button>
@@ -341,7 +377,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                         disabled={false}
                                         size="small"
                                         variant="outlined"
-                                        onClick={deleteHandle}
+                                        onClick={()=>deleteHandle(props.car.id)}
                                         >
                                         delete
                                     </Button>
