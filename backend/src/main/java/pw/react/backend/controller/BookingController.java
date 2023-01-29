@@ -11,6 +11,7 @@ import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Booking;
 import pw.react.backend.services.BookingService;
 import pw.react.backend.web.BookingDto;
+import pw.react.backend.web.utils.NotifyFailedException;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -74,14 +75,15 @@ public class BookingController extends AbstractController {
     @PostMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBooking(@RequestHeader HttpHeaders headers, @PathVariable UUID id,
-                              @Valid @RequestBody BookingDto updatedBooking) {
+                              @Valid @RequestBody BookingDto updatedBooking) throws NotifyFailedException {
         logHeaders(headers, logger);
         bookingService.updateBooking(id, BookingDto.convertToBooking(updatedBooking));
     }
 
     // Removes booking from repository
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> removeBooking(@RequestHeader HttpHeaders headers, @PathVariable UUID id) {
+    public ResponseEntity<String> removeBooking(@RequestHeader HttpHeaders headers, @PathVariable UUID id)
+            throws NotifyFailedException {
         logHeaders(headers, logger);
         boolean deleted = bookingService.deleteBooking(id);
         if (!deleted) {

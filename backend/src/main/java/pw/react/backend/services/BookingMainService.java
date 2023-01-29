@@ -6,7 +6,10 @@ import pw.react.backend.dao.BookingRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Booking;
 import pw.react.backend.web.BookingDto;
+import pw.react.backend.web.utils.NotifyFailedException;
+import pw.react.backend.web.utils.UpdateNotifier;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,28 +21,41 @@ public class BookingMainService implements BookingService {
     private final Logger logger = LoggerFactory.getLogger(BookingMainService.class);
 
     private final BookingRepository bookingRepository;
+    private final UpdateNotifier updateNotifier;
 
-    public BookingMainService(BookingRepository repository) {
+    public BookingMainService(BookingRepository repository, UpdateNotifier updateNotifier) {
         this.bookingRepository = requireNonNull(repository);
+        this.updateNotifier = updateNotifier;
     }
 
     @Override
-    public Booking updateBooking(UUID id, Booking updatedBooking) throws ResourceNotFoundException {
+    public Booking updateBooking(UUID id, Booking updatedBooking)
+            throws ResourceNotFoundException, NotifyFailedException {
         if (bookingRepository.existsById(id)) {
             updatedBooking.setId(id);
             Booking result = bookingRepository.save(updatedBooking);
             logger.info("Booking with id {} updated.", id);
+            try {
+                updateNotifier.notifyBookly(List.of(id));
+            } catch (IOException e) {
+                throw new NotifyFailedException(e.getMessage());
+            }
             return result;
         }
         throw new ResourceNotFoundException(String.format("Booking with id [%s] not found.", id));
     }
 
     @Override
-    public boolean deleteBooking(UUID id) {
+    public boolean deleteBooking(UUID id) throws NotifyFailedException {
         boolean result = false;
         if (bookingRepository.existsById(id)) {
             bookingRepository.deleteById(id);
             logger.info("Booking with id {} deleted.", id);
+            try {
+                updateNotifier.notifyBookly(List.of(id));
+            } catch (IOException e) {
+                throw new NotifyFailedException(e.getMessage());
+            }
             result = true;
         }
         return result;

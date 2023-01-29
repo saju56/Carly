@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pw.react.backend.dao.*;
+import pw.react.backend.web.utils.UpdateNotifier;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -23,13 +24,16 @@ public class MainConfig {
 
     private final String corsUrls;
     private final String corsMappings;
+    private final String booklyNotificationEndpoint;
 
     private static final Map<String, String> envPropertiesMap = System.getenv();
 
     public MainConfig(@Value(value = "${cors.urls}") String corsUrls,
-                      @Value(value = "${cors.mappings}") String corsMappings) {
+                      @Value(value = "${cors.mappings}") String corsMappings,
+                      @Value(value = "${bookly.url.notifications}") String booklyNotificationEndpoint) {
         this.corsUrls = corsUrls;
         this.corsMappings = corsMappings;
+        this.booklyNotificationEndpoint = booklyNotificationEndpoint;
     }
 
     @PostConstruct
@@ -74,8 +78,8 @@ public class MainConfig {
     }
 
     @Bean
-    public BookingService bookingMainService(BookingRepository bookingRepository) {
-        return new BookingMainService(bookingRepository);
+    public BookingService bookingMainService(BookingRepository bookingRepository, UpdateNotifier updateNotifier) {
+        return new BookingMainService(bookingRepository, updateNotifier);
     }
 
     @Bean
@@ -86,6 +90,11 @@ public class MainConfig {
     @Bean
     public OfferService offerMainService(CarService carService) {
         return new OfferMainService(carService);
+    }
+
+    @Bean
+    public UpdateNotifier updateNotifier() {
+        return new UpdateNotifier(booklyNotificationEndpoint);
     }
 
     private String[] getCorsUrls() {
