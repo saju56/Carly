@@ -10,11 +10,12 @@ import {
   Text,
   View,
   Image,
+  Alert,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Montserrat_400Regular, useFonts } from "@expo-google-fonts/montserrat";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Context, RootStackParamList, UserAttributes } from "../App";
+import { RootStackParamList, UserAttributes } from "../App";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { CarFilled } from "@ant-design/icons";
 import { CollapsedItem } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
@@ -45,44 +46,34 @@ type Car = {
   bodyType: String;
 };
 
-async function request<TResponse>(
-  url: string,
-  config: RequestInit = {}
-): Promise<TResponse> {
-  return await fetch(url, config)
-    .then((response) => response.json())
-    .then((data) => data as TResponse);
-}
-
 export default function BookingsView({ route, navigation }: BookingsViewProps) {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const attributes: UserAttributes = route.params;
   const [selectedId, setSelectedId] = useState<String>();
   const [currCar, setCurrCar] = useState<Car>();
   const [cost, setCost] = useState(0);
+  const [isLoading, setIsLoading] = useState(false)
 
   //   admin so all bookings
   const getBookings = async () => {
-    await fetch("http://192.168.0.213:8080/logic/api/bookings", {
+    await fetch("https://carly-backend-app.azurewebsites.net/logic/api/bookings", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${attributes.token.jwttoken}`,
         "Content-type": "application/json; charset=UTF-8",
       },
+    }).then((response) => {
+      if (response.ok) 
+        return response.json();
+      else
+        throw new Error("ERROR " + response.status);
+    }).then((bookings) => {
+      setBookings(bookings);
+      console.log("Success fetching bookings.");
     })
-      .then((response) => {
-        if (response.ok) return response.json();
-        else {
-          throw new Error("ERROR " + response.status);
-        }
-      })
-      .then((bookings) => {
-        setBookings(bookings);
-        console.log("Success fetching bookings.");
-      })
-      .catch((e) => {
-        console.log("Error when trying to fetch bookings: " + e);
-      });
+    .catch((e) => {
+      console.log("Error when trying to fetch bookings: " + e);
+    });
   };
 
   useEffect(() => {
@@ -98,61 +89,70 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
   ) => {
     setSelectedId(id);
 
-    await fetch("http://192.168.0.213:8080/logic/api/cars/" + carId, {
+    await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${attributes.token.jwttoken}`,
         "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        else {
-          throw new Error("ERROR " + response.status);
-        }
-      })
-      .then((car) => {
-        setCurrCar(car);
-        console.log("Success fetching car.");
-        const d_from = new Date(startDate.substring(0, 10));
-        const d_to = new Date(endDate.substring(0, 10));
-        const utc1 = Date.UTC(
-          d_from.getFullYear(),
-          d_from.getMonth(),
-          d_from.getDate()
-        );
-        const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-        const utc2 = Date.UTC(
-          d_to.getFullYear(),
-          d_to.getMonth(),
-          d_to.getDate()
-        );
-        setCost((Math.floor(utc2 - utc1) / _MS_PER_DAY) * car.pricePerDay);
-      })
-      .catch((e) => {
-        console.log("Error when trying to fetch car: " + e);
-      });
+    }).then((response) => {
+      if (response.ok) return response.json();
+      else {
+        throw new Error("ERROR " + response.status);
+      }
+    }).then((car) => {
+      setCurrCar(car);
+      console.log("Success fetching car.");
+      let d_from = new Date(startDate.substring(0, 10));
+      let d_to = new Date(endDate.substring(0, 10));
+      let utc1 = Date.UTC(
+        d_from.getFullYear(),
+        d_from.getMonth(),
+        d_from.getDate()
+      );
+      let _MS_PER_DAY = 1000 * 60 * 60 * 24;
+      let utc2 = Date.UTC(
+        d_to.getFullYear(),
+        d_to.getMonth(),
+        d_to.getDate()
+      );
+      setCost((Math.floor(utc2 - utc1) / _MS_PER_DAY) * car.pricePerDay);
+    }).catch((e) => {
+      console.log("Error when trying to fetch car: " + e);
+    });
   };
 
-  const deleteHandling = async (id: String) => {
-    await fetch("http://192.168.0.213:8080/logic/api/bookings/" + id, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${attributes.token.jwttoken}`,
-      },
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        else {
-          throw new Error("ERROR " + response.status);
-        }
-      })
-      .then(() => {
-        console.log("Booking deleted");
-      })
-      .catch((e) => {
-        console.log("Error when trying to delete booking: " + e);
-      });
+  const handleCancel = async (id: String) => {
+    if (!attributes.isLoggedIn) {
+      return;
+    }
+
+    Alert.alert(
+      'Would you like to cancel this booking?',
+      '',
+      [
+        { text: "No", style: 'cancel', onPress: () => {} },
+        {
+          text: 'Yes, cancel the booking.',
+          style: 'destructive',
+          onPress: async () => {
+            await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/bookings/${id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${attributes.token.jwttoken}`,
+              },
+            }).then((response) => {
+              if (response.ok) return response.json()
+              else throw new Error("ERROR " + response.status)
+            }).then(() => {
+              console.log("Success cancelling booking.")
+            }).catch((e) => {
+              console.log("Error when trying to cancel booking: " + e)
+            });
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -173,6 +173,9 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
         style={styles.list}
         contentContainerStyle={styles.listContainer}
         data={bookings}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={getBookings} />
+        }
         renderItem={({ item, index }) =>
           item.id !== selectedId ? (
             <Pressable
@@ -259,7 +262,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
                   </View>
                   <Pressable
                     style={styles_ext.cancelButton}
-                    onPress={() => deleteHandling(item.id)}
+                    onPress={() => handleCancel(item.id)}
                   >
                     <Text style={{ fontSize: 15, fontWeight: "bold" }}>
                       cancel

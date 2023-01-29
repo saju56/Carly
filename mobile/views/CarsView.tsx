@@ -9,6 +9,7 @@ import {
   View,
   Pressable,
   Image,
+  RefreshControl,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -43,36 +44,34 @@ async function request<TResponse>(
 }
 
 export default function CarsView({ route, navigation }: CarsViewProps) {
-  const [cars, setCars] = useState<Car[]>([]);
-  const [selectedId, setSelectedId] = useState<String>();
-  const attributes: UserAttributes = route.params;
+  const [cars, setCars] = useState<Car[]>([])
+  const [selectedId, setSelectedId] = useState<String>()
+  const [isLoading, setIsLoading] = useState(false)
+  const attributes: UserAttributes = route.params
 
   const getCars = async () => {
-    await fetch("http://192.168.0.213:8080/logic/api/cars", {
+    setIsLoading(true)
+    await fetch("https://carly-backend-app.azurewebsites.net/logic/api/cars", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${attributes.token.jwttoken}`,
         "Content-type": "application/json; charset=UTF-8",
       },
+    }).then((response) => {
+      if (response.ok) return response.json()
+      else throw new Error("ERROR " + response.status)
+    }).then((cars) => {
+      setCars(cars)
+      console.log("Success fetching cars.")
+    }).catch((e) => {
+      console.log("Error when trying to fetch cars: " + e)
     })
-      .then((response) => {
-        if (response.ok) return response.json();
-        else {
-          throw new Error("ERROR " + response.status);
-        }
-      })
-      .then((cars) => {
-        setCars(cars);
-        console.log("Success fetching cars.");
-      })
-      .catch((e) => {
-        console.log("Error when trying to fetch cars: " + e);
-      });
-  };
+    setIsLoading(false)
+  }
 
   useEffect(() => {
-    getCars();
-  }, []);
+    getCars()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -90,6 +89,9 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
       </View>
       <FlatList
         style={styles.list}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={getCars} />
+        }
         contentContainerStyle={styles.listContainer}
         data={cars}
         renderItem={({ item }) =>
@@ -101,7 +103,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
               <Image
                 style={{ flex: 0.5, width: 100, height: 60 }}
                 source={{
-                  uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`,
+                  uri: `https://carly-backend-app.azurewebsites.net/logic/api/cars/${item.id}/image2`,
                 }}
               />
               <View style={{ flex: 0.7, marginLeft: 10 }}>
