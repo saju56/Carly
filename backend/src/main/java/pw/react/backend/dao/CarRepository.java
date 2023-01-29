@@ -13,10 +13,11 @@ public interface CarRepository extends JpaRepository<Car, UUID> {
 
     @Query("SELECT c FROM Car c WHERE c.id NOT IN (" +
             "SELECT b.carId FROM Booking b WHERE b.startDate<?2 AND b.endDate>?1)" +
-            "AND c.bodyType LIKE ?4 AND c.city LIKE ?5 ORDER BY ?3")
+            "AND c.bodyType LIKE ?4 AND c.city LIKE ?5 AND c.model LIKE ?6 ORDER BY ?3")
     List<Car> findAvailableCarsForIntervalAndBodyTypeSortBy(@Param(value = "request") LocalDateTime startDate,
                                                             @Param(value = "end") LocalDateTime endDate,
                                                             @Param(value = "sortBy") String sortBy,
                                                             @Param(value = "bodyType") String bodyType,
-                                                            @Param(value = "city") String city);
+                                                            @Param(value = "location") String location,
+                                                            @Param(value = "model") String model);
 }

@@ -35,12 +35,13 @@ public class OfferController extends AbstractController {
     public ResponseEntity<Collection<CarDto>> getOffers(
             @RequestHeader HttpHeaders headers,
             @RequestParam(value = "location", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String location,
-            @RequestParam(value = "dateFrom", required = false) LocalDateTime dateFrom,
-            @RequestParam(value = "dateTo", required = false) LocalDateTime dateTo,
+            @RequestParam LocalDateTime dateFrom,
+            @RequestParam LocalDateTime dateTo,
             @RequestParam(value = "sortBy", required = false, defaultValue = DEFAULT_SORT) String sortBy,
             @RequestParam Integer page,
             @RequestParam Integer itemsOnPage,
-            @RequestParam(value = "bodyType", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String bodyType)
+            @RequestParam(value = "bodyType", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String bodyType,
+            @RequestParam(value = "model", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String model)
             throws BadRequestException {
 
         if (dateFrom == null) {
@@ -50,7 +51,8 @@ public class OfferController extends AbstractController {
             dateTo = LocalDateTime.now().plusHours(1L);
         }
         logHeaders(headers, logger);
-        OffersRequest request = new OffersRequest(location, dateFrom, dateTo, sortBy, page, itemsOnPage, bodyType);
+        OffersRequest request = new OffersRequest(location, dateFrom, dateTo, sortBy,
+                page, itemsOnPage, bodyType, model);
         List<CarDto> result = offerService.getOffersByOfferRequest(request);
         return ResponseEntity.ok().body(result);
     }

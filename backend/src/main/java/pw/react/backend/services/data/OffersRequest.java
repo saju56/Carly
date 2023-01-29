@@ -8,7 +8,8 @@ public record OffersRequest(String location,
                             String sortBy,
                             Integer page,
                             Integer itemsOnPage,
-                            String bodyType) {
+                            String bodyType,
+                            String model) {
     // Equal to % as in SQL it will mean to take every string
     public static final String NO_STRING_TYPE_PARAMETER = "%";
 }

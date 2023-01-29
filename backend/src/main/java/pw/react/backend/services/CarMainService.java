@@ -78,7 +78,8 @@ public class CarMainService implements CarService{
                 offersRequest.dateTo(),
                 offersRequest.sortBy(),
                 offersRequest.bodyType(),
-                offersRequest.location())
+                offersRequest.location(),
+                offersRequest.model())
                 .stream().map(CarDto::valueFrom)
                 .toList();
     }
