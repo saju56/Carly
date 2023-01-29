@@ -1,9 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Montserrat_400Regular, useFonts } from '@expo-google-fonts/montserrat';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Context, RootStackParamList, UserAttributes } from '../App';
+
+type BookingsViewProps = NativeStackScreenProps<RootStackParamList, 'Bookings'>
 
 type Booking = {
   id: String;
@@ -22,22 +26,35 @@ async function request<TResponse>(
     .then((data) => data as TResponse);
 }
 
-export default function AdminBookingsView() {
+export default function BookingsView({ route, navigation } : BookingsViewProps) {
   const [isLoading, setLoading] = useState(true);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsCount, setBookingsCount] = useState(0)
+  const attributes : UserAttributes = route.params
 
   //   admin so all bookings
   const getBookings = async () => {
-    try {
-      setLoading(true);
-      let response : Booking[] | null = []
-      await request<Booking[]>('http://192.168.1.10:8080/logic/api/bookings').then((bookings) => (response = bookings))
-      setBookingsCount(Object.keys(response).length)
-      setBookings(response)
-    } catch(error){
-      console.error(error);
-    }
+    setLoading(true);
+    await fetch('http://192.168.1.10:8080/logic/api/bookings', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${attributes.token.jwttoken}`,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then((response) => {
+      if (response.ok)
+          return response.json()
+      else{
+        throw new Error("ERROR " + response.status)
+      }
+    }).then((bookings) => {
+      setBookings(bookings)
+      console.log("Success fetching bookings.")
+      setBookingsCount(Object.keys(bookings).length)
+    }).catch((e) => {
+      console.log("Error when trying to fetch bookings: " + e)
+    })
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -50,13 +67,18 @@ export default function AdminBookingsView() {
             <View>
                 <Text style={styles.headerText}>current</Text>
                 <Text style={styles.headerTextBold}>bookings</Text>
+                <Text style={styles.infoText}>{}</Text>
             </View>
             <View>
-                <Pressable></Pressable>
+              <Pressable
+                style={styles.button}
+                onPress={() => navigation.navigate('Menu', attributes)}
+              >
+                <Text style={styles.menuText}>home</Text>
+              </Pressable>
             </View>
         </View>
       <Text style={styles.infoText}>bookings found: {bookingsCount}</Text>
-      <Button title='home'></Button>
       <FlatList
             data={bookings}
             renderItem={({item}) => <>
@@ -85,6 +107,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%'
+  },
+  header: {
+    
   },
   headerText: {
     fontSize: 35,

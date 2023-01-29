@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList, UserAttributes } from "../App";
 
 type Car = {
   id: String;
@@ -29,6 +31,8 @@ type Car = {
   bodyType: String;
 };
 
+type CarsViewProps = NativeStackScreenProps<RootStackParamList, 'Cars'>
+
 async function request<TResponse>(
   url: string,
   config: RequestInit = {}
@@ -38,10 +42,10 @@ async function request<TResponse>(
     .then((data) => data as TResponse);
 }
 
-export default function AdminCarsView() {
-  const navigation = useNavigation();
+export default function CarsView({route, navigation} : CarsViewProps) {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedId, setSelectedId] = useState<String>();
+  const attributes : UserAttributes = route.params
 
   const getCars = async () => {
     try {
@@ -54,18 +58,6 @@ export default function AdminCarsView() {
       console.error(error);
     }
   };
-
-  // const loadImage = async (carId: String) => {
-  //   try {
-  //     const res = await fetch(
-  //       `http://192.168.0.213:8080/logic/api/cars/${carId}/image2`
-  //     )
-  //     const data = await res.blob();
-  //     return ();
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // };
 
   useEffect(() => {
     getCars();
@@ -80,7 +72,7 @@ export default function AdminCarsView() {
         </View>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("AdminMenu")}
+          onPress={() => navigation.navigate('Menu', attributes)}
         >
           <Text style={styles.menuText}>home</Text>
         </Pressable>

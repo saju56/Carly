@@ -5,22 +5,24 @@ import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Montserrat_400Regular, useFonts } from "@expo-google-fonts/montserrat";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
 
-export default function AdminMenuView() {
-  const navigation = useNavigation();
+type MenuViewProps = NativeStackScreenProps<RootStackParamList, 'Menu'>
 
+export default function MenuView({route, navigation} : MenuViewProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>carly</Text>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate("AdminCarsView")}
+        onPress={() => navigation.navigate('Cars', route.params)}
       >
         <Text style={styles.loginText}>cars</Text>
       </Pressable>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate("AdminBookingsView")}
+        onPress={() => navigation.navigate('Bookings', route.params)}
       >
         <Text style={styles.loginText}>bookings</Text>
       </Pressable>
