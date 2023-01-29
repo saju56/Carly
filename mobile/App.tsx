@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AdminMenuView from "./views/AdminMenuView";
 import AdminBookingsView from "./views/AdminBookingsView";
 import { createContext, useContext } from "react";
+import AdminCarsView from "./views/AdminCarsView";
 
 export type RootStackParamList = {
   Login: undefined,
