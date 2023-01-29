@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Booking} from "../model/Booking";
 import Loader from "../utils/Loader";
-import { updateCommaList } from 'typescript';
-import { Box, Button, Card, CardMedia, Grid, makeStyles, styled, Typography } from '@mui/material';
+import { Box, Button, Card, CardMedia, Grid, styled, Typography } from '@mui/material';
+import { Context } from '../App';
+import { properties } from '../resources/properties';
+import { Car } from '../model/Car';
 
 
 
@@ -21,18 +23,72 @@ const RightText = styled(Typography)({
 
 const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) => {
     const [deleting, setDeleting] = useState(false);
-    
-    const deleteHandle = () => {
+    const {token, setToken} = useContext(Context);
+    const [currCar, setCurrCar] = useState<Car>();
+    const [cost, setCost] = useState(0);
+    const [dateFrom, setDateFrom] = useState<Number>();
+    const [dateTo, setDateTo] = useState<Number>();
+
+    const handleCancel = async (id: String) => {
         setDeleting(true);
-        //deleteCar(props.booking.id)
-         //   .then(()=>props.updateList())
-          //  .catch(e=>console.error(JSON.stringify(e)))
-           // .finally(()=>setDeleting(false))
+            await fetch(`${properties.url}/logic/api/bookings/${id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }).then((response) => {
+              if (response.ok) return response.json()
+              else throw new Error("ERROR " + response.status)
+            }).then(() => {
+              console.log("Success cancelling booking.")
+              props.updateList();
+            }).catch((e) => {
+              console.log("Error when trying to cancel booking: " + e)
+            });
     }
     
+    const getOneCar = async()=> {
+        await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${props.booking.carId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.ok) return response.json();
+      else {
+        throw new Error("ERROR " + response.status);
+      }
+    }).then((car) => {
+      setCurrCar(car);
+      console.log("Success fetching car.");
+      let d_from = new Date(props.booking.startDate.substring(0, 10));
+      let d_to = new Date(props.booking.endDate.substring(0, 10));
+      let utc1 = Date.UTC(
+        d_from.getFullYear(),
+        d_from.getMonth(),
+        d_from.getDate()
+      );
+      setDateFrom(utc1);
+      let _MS_PER_DAY = 1000 * 60 * 60 * 24;
+      let utc2 = Date.UTC(
+        d_to.getFullYear(),
+        d_to.getMonth(),
+        d_to.getDate()
+      );
+      setDateTo(utc2);
+      setCost((Math.floor(utc2 - utc1) / _MS_PER_DAY) * car.pricePerDay);
+    }).catch((e) => {
+      console.log("Error when trying to fetch car: " + e);
+    });
+    }
     const theme = {
         spacing: 8,
       }
+
+    useEffect(() => {
+        getOneCar();
+    }, []);
 
     return (
         <Loader loading={deleting} label="Deleting">
@@ -42,26 +98,27 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
                             {/*Render the InnerGrid as a child item */}
                                 <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <CardMedia component="img"
-                                                //image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2018-rolls-royce-phantom-1536152159.png?crop=1.00xw:1.00xh;0,0&resize=980:*"
+                                                image={`${properties.url}/logic/api/cars/${props.booking.carId}/image2`}
                                                 alt="Car photo"
                                                 width="40px"
                                                 ></CardMedia>
-                                    <LeftText variant='h4' sx={{fontWeight: 'bold'}}>{props.booking.id}</LeftText>
-                                    <LeftText variant='h5'>{props.booking.id}</LeftText>
+                                    <LeftText variant='h4' sx={{fontWeight: 'bold'}}>{currCar?.brand}</LeftText>
+                                    <LeftText variant='h5'>{currCar?.model}</LeftText>
                                 </Grid>
                                 <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
-                                    <LeftText sx={{fontWeight: 'bold'}}>booking no. {props.booking.id}</LeftText>  
-                                    <LeftText>vin: {props.booking.id}</LeftText>
-                                    <LeftText>for: {props.booking.id} {props.booking.id}</LeftText>
-                                    <LeftText>from: {props.booking.id}</LeftText>
-                                    <LeftText>to: {props.booking.id}</LeftText>
+                                    <LeftText sx={{fontWeight: 'bold'}}>booking no. #{props.booking.id.substring(0,6)}</LeftText>  
+                                    <LeftText>vin: {currCar?.vin}</LeftText>
+                                    <LeftText>for: bookly</LeftText>
+                                    <LeftText>from: {String(dateFrom)}</LeftText>
+                                    <LeftText>to: {String(dateTo)}</LeftText>
 
                                 </Grid>
                                 <Grid item xs={3} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
-                                    <LeftText variant='h4'>${props.booking.id}/booking</LeftText>
+                                    <LeftText variant='h4'>${cost}/booking</LeftText>
                                 </Grid>
                                 <Grid item xs={1} sx={{m: 1}}  direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <Button 
+                                    onClick={()=>handleCancel(props.booking.id)}
                                     color="inherit"
                                     disabled={false}
                                     size="small"

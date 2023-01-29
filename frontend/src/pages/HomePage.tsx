@@ -29,7 +29,6 @@ function HomePage  ()  {
   const handleLogin = async () => {
     setCredInvalid(true)
     await fetch(properties.url+'/authenticate', {
-    await fetch('http://192.168.0.213:8080/authenticate', {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: {
@@ -67,9 +66,11 @@ function HomePage  ()  {
       
       <Grid container direction="column" display='flex' alignItems="center" justifyContent="center" style={{width: "100%", height: "81vh"}}>
       <Card sx={{ m: 1 }} style={{width: "50vh", height: "55vh"}}>
+
+      {token==='' ? 
       <Grid container direction="column" display='flex' alignItems="center" justifyContent="center" style={{width: "100%", height: "100%"}}>
         <Grid item sx={{marginBottom: "50px"}}>
-          <Typography variant="h4">login</Typography>
+          <Typography variant="h4">log in</Typography>
         </Grid>
 
         <Grid item sx={{marginBottom: "10px"}}>
@@ -116,7 +117,11 @@ function HomePage  ()  {
         </Grid>
 
       </Grid>
-
+    : <Grid container direction="column" display='flex' alignItems="center" justifyContent="center" style={{width: "100%", height: "100%"}}>
+        <Grid item sx={{marginBottom: "50px"}}>
+          <Typography variant="h4">logged in</Typography>
+        </Grid>
+      </Grid> }
       </Card>
       </Grid>
     
