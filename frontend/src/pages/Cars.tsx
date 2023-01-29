@@ -2,22 +2,26 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import './Cars.css';
-import { autocompleteClasses, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Fab, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Loader from "../utils/Loader";
 import CarItem from '../components/CarItem';
 import {Car} from "../model/Car";
+import AddIcon from '@mui/icons-material/Add';
+
 
  /* READ DATA FOR TESTING ONLY  */
  import cars_ from './data.json';
 import { maxHeaderSize } from 'http';
+import AddCarForm from '../components/AddCarForm';
+import AddCarFormContainer from '../components/AddCarFormContainer';
+import { render } from '@testing-library/react';
+import { getCars } from '../logic/api';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -46,7 +50,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
+  color: 'black',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -69,38 +73,66 @@ function Cars () {
   };
 
   const [cars, setCars] = useState(cars_);
-  //const [loading, setLoading] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  
+  const [adding, setAdding] = useState(false);
+
 
 
   useEffect(()=> {
   },[])
+/*
+  useEffect(()=> {
+    getCars()
+        .then(cars => setCars(cars))
+        .catch(e => console.error(JSON.stringify(e)))
+        .finally(()=>setLoading(false))
+},[])
 
+const updateList = () => {
+    getCars()
+        .then(cars => setCars(cars))
+        .catch(e => console.error(JSON.stringify(e)))
+        .finally(()=>setLoading(false))
+}
+*/
   const updateList = () => {
       
   }
  
+  
+    const addClick = () => {
+      render(
+      <AddCarFormContainer updateList={updateList} />
+      )
+    };
+
+    const handleClose = () => {
+      //setOpen(false);
+      
+    }
+
 
     return (
       // Top bar 
       <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{height: "9vh"}}>
-        <Toolbar>
+        <Toolbar style={{backgroundColor: '#DADEEA'}}>
           <div className="CarsHeading">
-          <Typography variant="h5" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+          <Typography variant="h5" style={{marginTop: '5px', marginBottom: '-10px'}} sx={{ flexGrow: 1, fontWeight: 'bold', display: { xs: 'none', sm: 'block' } }} color="black">
             available
           </Typography>
-          <Typography variant="h6" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }} color="black">
             cars
           </Typography>
           </div>
 
-        <Grid container justifyContent="flex-end">
-          {/* sort by functionality */}
-          <Grid item direction="column"
-      alignItems="center" >
+
+        <Grid container justifyContent="flex-end" >
+          {/* sort by functionality  */}
+          <Grid item direction="column" alignItems="center" >  
+   
+        
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel id="demo-select-small">sort by</InputLabel>
               <Select
@@ -121,11 +153,11 @@ function Cars () {
           </Grid>
 
            {/* Search functionality */}
-           <Grid item direction="column"
-      alignItems="center">
+           <Grid item direction="column" alignItems="center" justifyContent="center" display="flex">
+      
           <Search>
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon style={{color: 'black'}}/>
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
@@ -134,11 +166,11 @@ function Cars () {
           </Search>
           </Grid>
         </Grid>
-          
+    
 
         </Toolbar>
       </AppBar>
-
+      
       {/* List of cars */}
       <Grid  sx={{ overflowY: "scroll", maxHeight: "81vh" }}>
       <Loader loading={loading}>
@@ -146,7 +178,13 @@ function Cars () {
       </Loader>
       </Grid>
 
-
+      {/* Floating add button */}
+      <Fab onClick={addClick} variant="extended" size="medium" color="inherit" aria-label="add" style={{position: 'absolute', bottom: '1.5%', right: '1.5%', color: 'black'}}>
+            <AddIcon sx={{ mr: 1 }} style={{color: 'black'}} />
+             add
+      </Fab>
+      
+    
     </Box>
 
 
