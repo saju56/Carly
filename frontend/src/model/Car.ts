@@ -1,17 +1,15 @@
-import {Key} from "react";
-
-export interface Car {
-    "id": Key,
-    "brand": string,
-    "model": string,
-    "status": boolean,
-    "doors": Number,
-    "seats": Number,
-    "year": Number,
-    "fuelType": string,
-    "pricePerDay": Number,
-    "vin": Number,
-    "mileage": Number,
-    "city": string,
-    "bodyType": string
-}
+export type Car = {
+  id: String;
+  brand: String;
+  model: String;
+  status: boolean;
+  seats: number;
+  doors: number;
+  fuelType: String;
+  mileage: number;
+  vin: number;
+  year: number;
+  pricePerDay: number;
+  city: String;
+  bodyType: String;
+};

@@ -13,7 +13,6 @@ import Bookings from "./pages/Bookings";
 import Layout from "./pages/Layout";
 import Error404Page from "./pages/Error404Page";
 import { StepContext } from "@mui/material";
-import { tokenToString } from "typescript";
 
 export type UserAttributes = {
   token: String

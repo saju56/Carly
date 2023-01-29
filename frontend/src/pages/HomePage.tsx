@@ -27,7 +27,7 @@ function HomePage  ()  {
 
   const handleLogin = async () => {
     setCredInvalid(true)
-    await fetch('https://carly-backend-app.azurewebsites.net/authenticate', {
+    await fetch('http://192.168.0.213:8080/authenticate', {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: {
@@ -40,7 +40,7 @@ function HomePage  ()  {
         throw new Error("ERROR " + response.status)
       }
     }).then((token: Token) => {
-      console.log(token)
+      console.log(token);
       setToken(token.jwttoken);
       console.log("Success logging in.")
       setCredInvalid(false)
