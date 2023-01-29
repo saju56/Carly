@@ -14,13 +14,13 @@ export default function AdminMenuView() {
       <Text style={styles.logo}>carly</Text>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate("AdminCarsView")}
+        onPress={() => navigation.navigate("AdminCars")}
       >
         <Text style={styles.loginText}>cars</Text>
       </Pressable>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate("AdminBookingsView")}
+        onPress={() => navigation.navigate("AdminBookings")}
       >
         <Text style={styles.loginText}>bookings</Text>
       </Pressable>
