@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useContext, useEffect, useState } from "react";
-import { Context } from "../App";
+import { Context, Token } from "../App";
 import { RootStackParamList } from "../App";
 import {
   StyleSheet,
@@ -12,7 +12,6 @@ import {
   Pressable,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type LoginViewProps = NativeStackScreenProps<RootStackParamList, 'Login'>
@@ -22,13 +21,15 @@ type Credentials = {
   password: String
 }
 
+type UserAttributes = {
+  token: Token,
+  isAdmin: Boolean
+}
+
 export default function LoginView(props: LoginViewProps) {
-  const navigation = useNavigation()
-  const context = useContext(Context)
-  
   const [credentials, setCredentials] = useState<Credentials>({ username : "", password : "" })
   const [credInvalid, setCredInvalid] = useState(false)
-  const [store, setStore] = useState(context)
+  const [attributes, setAttributes] = useState<UserAttributes>({ token: { jwttoken : "" }, isAdmin: false})
 
   const handleLogin = async () => {
     setCredInvalid(true)
@@ -44,8 +45,10 @@ export default function LoginView(props: LoginViewProps) {
       else{
         throw new Error("ERROR " + response.status)
       }
-    }).then((token) => {
-      setStore({jwtToken : token, isAdmin: store.isAdmin})
+    }).then((token : Token) => {
+      console.log(token)
+      setAttributes({ token : token, isAdmin: false})
+      console.log("Success logging in.")
       setCredInvalid(false)
     }).catch((e) => {
       setCredInvalid(true)
@@ -55,7 +58,7 @@ export default function LoginView(props: LoginViewProps) {
 
   useEffect(() => {
     if (!credInvalid) {
-      props.navigation.navigate('Menu')
+      props.navigation.navigate('Menu', { token: attributes.token, isAdmin: attributes.isAdmin })
     }
   }, [credInvalid])
 
@@ -82,7 +85,7 @@ export default function LoginView(props: LoginViewProps) {
             style={styles.textField}
           />
         </View>
-        { credInvalid ? <Text>{store.jwtToken}</Text> : <></> }
+        { credInvalid ? <Text>{attributes.token.jwttoken}</Text> : <></> }
         <Pressable
           style={styles.button}
           onPress={handleLogin}
