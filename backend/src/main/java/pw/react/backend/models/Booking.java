@@ -26,6 +26,12 @@ public class Booking {
     @Column
     private LocalDateTime endDate;
 
+    @Column
+    private String name;
+
+    @Column
+    private String lastname;
+
     public LocalDateTime getStartDate() {
         return startDate;
     }
@@ -59,5 +65,21 @@ public class Booking {
     }
     public UUID getId() {
         return id;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
