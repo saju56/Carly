@@ -189,6 +189,22 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                                         }}
                                                         /></RightText>
                                     </Grid>
+                                    <Grid container justifyContent="space-between">
+                                        <LeftText >body type:</LeftText>
+                                        <RightText ><TextField
+                                                        hiddenLabel
+                                                        id="filled-hidden-label-small"
+                                                        defaultValue={props.car.bodyType}
+                                                        variant="filled"
+                                                        size="small"
+                                                        onChange={(e)=>{
+                                                            setCurrentCar({
+                                                                ...currentCar,
+                                                                bodyType: e.target.value
+                                                            })
+                                                        }}
+                                                        /></RightText>
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={3} sx={{m: 1, borderLeft: 1, paddingLeft: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                          <LeftText sx={{fontWeight: 'bold'}}>Location:</LeftText>
@@ -208,26 +224,24 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                                         }}
                                                         /></RightText>
                                     </Grid>
-                                    <Grid container justifyContent="space-between">
-                                        <LeftText >street:</LeftText>
+                                        <LeftText sx={{fontWeight: 'bold'}}>Price per day</LeftText>
+                                        <Grid container justifyContent="space-between">
+                                        <LeftText>in $:</LeftText>
                                         <RightText ><TextField
                                                         hiddenLabel
                                                         id="filled-hidden-label-small"
-                                                        defaultValue="Small"
+                                                        defaultValue={props.car.pricePerDay}
                                                         variant="filled"
                                                         size="small"
+                                                        onChange={(e)=>{
+                                                            setCurrentCar({
+                                                                ...currentCar,
+                                                                pricePerDay: Number(e.target.value)
+                                                            })
+                                                        }}
                                                         /></RightText>
                                     </Grid>
-                                    <Grid container justifyContent="space-between">
-                                        <LeftText >house no.:</LeftText>
-                                        <RightText ><TextField
-                                                        hiddenLabel
-                                                        id="filled-hidden-label-small"
-                                                        defaultValue="Small"
-                                                        variant="filled"
-                                                        size="small"
-                                                        /></RightText>
-                                    </Grid>
+                                    
                                 </Grid>
                                 <Grid item xs={1} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <Button
@@ -294,6 +308,10 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                         <LeftText >year:</LeftText>
                                         <RightText >{String(props.car.year)}</RightText>
                                     </Grid>
+                                    <Grid container justifyContent="space-between">
+                                        <LeftText >body type:</LeftText>
+                                        <RightText >{String(props.car.bodyType)}</RightText>
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={3} sx={{m: 1, borderLeft: 1, paddingLeft: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                          <LeftText sx={{fontWeight: 'bold'}}>Location:</LeftText>
@@ -301,14 +319,12 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                         <LeftText >city:</LeftText>
                                         <RightText >{props.car.city}</RightText>
                                     </Grid>
+                                        <LeftText sx={{fontWeight: 'bold'}}>Price per day:</LeftText>
                                     <Grid container justifyContent="space-between">
-                                        <LeftText >street:</LeftText>
-                                        <RightText >{props.car.city}</RightText>
+                                        <LeftText>in $:</LeftText>
+                                        <RightText >{String(props.car.pricePerDay)}</RightText>
                                     </Grid>
-                                    <Grid container justifyContent="space-between">
-                                        <LeftText >house no.:</LeftText>
-                                        <RightText >{props.car.city}</RightText>
-                                    </Grid>
+                                   
                                 </Grid>
                                 <Grid item xs={1} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <Button

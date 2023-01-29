@@ -15,26 +15,56 @@ export interface AddCarFormProps {
     hideForm: () => void;
 }
 
+
 const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
    
-    const [addedCar, setAddedCar] = useState('');
+    let car_: Car = {
+        id: 123,
+        brand: '',
+        model: '',
+        status: true,
+        doors: -1,
+        seats: -1,
+        year: -1,
+        fuelType: '',
+        pricePerDay: -1,
+        vin: -1,
+        mileage: -1,
+        city: '',
+        bodyType: ''
+    }
 
-    const [open, setOpen] = React.useState(false);
+    const [addedCar, setAddedCar] = useState(car_);
+
+    const [open, setOpen] = React.useState(true);
 
     const handleClickOpen = () => {
-    setOpen(true);
+        setOpen(true);
     };
 
     const handleClose = () => {
-    setOpen(false);
+        setOpen(false);
     };
 
-    const handleSave = () => {
-        //props.saveCar(addedCar);
+    const handleSubmit = () => {
+        if(isStringValid(addedCar.brand) && isStringValid(addedCar.bodyType) && 
+            isStringValid(addedCar.city) && isNumberValid(addedCar.doors) && 
+            isStringValid(addedCar.fuelType) && isStringValid(addedCar.model) &&
+            isNumberValid(addedCar.mileage) && isNumberValid(addedCar.vin) &&
+            isYearValid(addedCar.year) && isNumberValid(addedCar.seats) && isNumberValid(addedCar.pricePerDay)){
+
+            //add car 
+            //props.saveCar(addedCar);
+
+            setOpen(false);
+        }
     }
+    const isStringValid = (str: String) => str.length > 1
+    const isNumberValid = (num: Number) => num > 0
+    const isYearValid = (num: Number) => num > 1900 && num < 2023
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open}>
             <Grid container>
                 <Grid item xs={4}>
                     <Box sx={{ m: 1 }} >
@@ -44,12 +74,43 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
                     </Box>
                     <Box sx={{ m: 1}}>
                         <Card>
-                            <TextField id="car-brand" label="car brand" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            brand: e.target.value
+                                                            }); console.log(addedCar)
+                                                        }} 
+                                                        id="car-brand" 
+                                                        label="car brand" 
+                                                        variant="filled"
+                                                        required
+                                                        error={!isStringValid(addedCar.brand)}
+                                                        />
                         </Card>
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-model" label="car model" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            model: e.target.value
+                                                            })
+                                                        }} id="car-model" 
+                                                            label="car model" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isStringValid(addedCar.model)}/>
+                        </Card>
+                    </Box>
+                    <Box sx={{ m: 1 }}>
+                        <Card>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            bodyType: e.target.value
+                                                            })
+                                                        }} id="car-body" 
+                                                            label="body type" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isStringValid(addedCar.bodyType)}/>
                         </Card>
                     </Box>
                 </Grid>
@@ -60,32 +121,80 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-seats" label="no. seats" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            seats: Number(e.target.value)
+                                                            })
+                                                        }} id="car-seats" 
+                                                            label="no. seats" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isNumberValid(addedCar.seats)}/>
                         </Card>
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-doors" label="no. doors" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            doors: Number(e.target.value)
+                                                            })
+                                                        }} id="car-doors" 
+                                                            label="no. doors" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isNumberValid(addedCar.doors)}/>
                         </Card>
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-year" label="year" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            year: Number(e.target.value)
+                                                            })
+                                                        }} id="car-year" 
+                                                            label="year" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isYearValid(addedCar.year)}/>
                         </Card>
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-vin" label="vin" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            vin: Number(e.target.value)
+                                                            })
+                                                        }} id="car-vin" 
+                                                            label="vin" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isNumberValid(addedCar.vin)}/>
                         </Card>
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-mileage" label="mileage (miles)" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            mileage: Number(e.target.value)
+                                                            })
+                                                        }} id="car-mileage" 
+                                                            label="mileage (miles)" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isNumberValid(addedCar.mileage)}/>
                         </Card>
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-fuel" label="fuel type" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            fuelType: e.target.value
+                                                            })
+                                                        }} id="car-fuel" 
+                                                            label="fuel type" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isStringValid(addedCar.fuelType)}/>
                         </Card>
                     </Box>
                     
@@ -98,24 +207,37 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
                     </Box>
                     <Box sx={{ m: 1 }}>
                         <Card>
-                            <TextField id="car-city" label="city" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            city: e.target.value
+                                                            })
+                                                        }} id="car-city" 
+                                                            label="city" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isStringValid(addedCar.city)}/>
                         </Card>
                     </Box>
-                    <Box sx={{ m: 1 }}>
+                    <Box sx={{ m: 1 }} style={{justifyContent:"center"}}>
+                        <Typography variant="h5" align="center" sx={{fontWeight: 'bold'}}>price per day</Typography>
                         <Card>
-                            <TextField id="car-street" label="street" variant="filled"/>
+                            <TextField onChange={(e)=>{setAddedCar({
+                                                            ...addedCar,
+                                                            pricePerDay: Number(e.target.value)
+                                                            })
+                                                        }} id="car-price" 
+                                                            label="price per day" 
+                                                            variant="filled"
+                                                            required
+                                                            error={!isNumberValid(addedCar.pricePerDay)}/>
                         </Card>
                     </Box>
-                    <Box sx={{ m: 1 }}>
-                        <Card>
-                            <TextField id="car-house" label="house no." variant="filled"/>
-                        </Card>
-                    </Box>
+                    
                 </Grid>
 
             </Grid>
             <Button
-                onClick={handleSave}
+                onClick={handleSubmit}
                 color="inherit"
                 disabled={false}
                 size="small"

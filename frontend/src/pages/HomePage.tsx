@@ -7,7 +7,6 @@ function HomePage  ()  {
       <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{height: "9vh"}}>
         <Toolbar style={{backgroundColor: '#DADEEA'}}>
-          
         </Toolbar>
       </AppBar>
       

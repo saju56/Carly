@@ -15,6 +15,7 @@ import Loader from "../utils/Loader";
 import BookingItem from '../components/BookingItem';
 import {Car} from "../model/Car";
 import AddIcon from '@mui/icons-material/Add';
+import { Booking } from '../model/Booking';
 
  /* READ DATA FOR TESTING ONLY  */
  import bookings_ from './data2.json';
