@@ -15,12 +15,13 @@ public record BookingDto(UUID id, UUID userId, UUID carId,
                          LocalDateTime startDate,
                          @JsonDeserialize(using = JsonDateDeserializer.class)
                          @JsonSerialize(using = JsonDateSerializer.class)
-                         LocalDateTime endDate) {
+                         LocalDateTime endDate, String name, String lastname) {
 
-    public static final BookingDto EMPTY = new BookingDto(null, null, null, null, null);
+    public static final BookingDto EMPTY = new BookingDto(null, null, null, null, null, null, null);
 
     public static BookingDto valueFrom(Booking booking) {
-        return new BookingDto(booking.getId(), booking.getUserId(), booking.getCarId(), booking.getStartDate(), booking.getEndDate());
+        return new BookingDto(booking.getId(), booking.getUserId(), booking.getCarId(),
+                booking.getStartDate(), booking.getEndDate(), booking.getName(), booking.getLastname());
     }
     public static Booking convertToBooking(BookingDto dto) {
         Booking booking = new Booking();
@@ -29,6 +30,8 @@ public record BookingDto(UUID id, UUID userId, UUID carId,
         booking.setUserId(dto.userId());
         booking.setStartDate(dto.startDate());
         booking.setEndDate(dto.endDate());
+        booking.setName(dto.name());
+        booking.setLastname(dto.lastname());
         return booking;
     }
 }
