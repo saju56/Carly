@@ -42,7 +42,7 @@ public class BookingController extends AbstractController {
         return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
-    @PostMapping(path = "")
+    @PutMapping(path = "")
     public ResponseEntity<Collection<BookingDto>> createBookings(@RequestHeader HttpHeaders headers,
                                                                   @Valid @RequestBody List<BookingDto> bookingDtos) {
         logHeaders(headers, logger);
@@ -62,7 +62,7 @@ public class BookingController extends AbstractController {
     }
 
     // Creates a new booking from supplied data (JSON)
-    @PutMapping(path = "")
+    @PostMapping(path = "")
     public ResponseEntity<BookingDto> createBooking(@RequestHeader HttpHeaders headers,
                                                     @Valid @RequestBody BookingDto bookingDto) {
         logHeaders(headers, logger);
