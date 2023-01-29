@@ -2,7 +2,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { AppBar, Button, Card, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Toolbar, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useContext, useEffect, useState } from 'react';
-import { UserAttributes, Context } from '../App';
+import { Context } from '../App';
+import { properties } from '../resources/properties';
 
 type Credentials = {
   username: string,
@@ -27,7 +28,7 @@ function HomePage  ()  {
 
   const handleLogin = async () => {
     setCredInvalid(true)
-    await fetch('https://carly-backend-app.azurewebsites.net/authenticate', {
+    await fetch(properties.url+'/authenticate', {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: {
