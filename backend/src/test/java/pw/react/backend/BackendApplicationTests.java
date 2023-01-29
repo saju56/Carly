@@ -1,6 +1,7 @@
 package pw.react.backend;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import pw.react.backend.web.utils.UpdateNotifier;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ActiveProfiles(profiles = {"mysql-dev"})
 class BackendApplicationTests {
 
+	@Autowired
 	private UpdateNotifier updateNotifier;
 	@Test
 	void contextLoads() {

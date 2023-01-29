@@ -29,7 +29,6 @@ import AddCarForm from "../components/AddCarForm";
 import AddCarFormContainer from "../components/AddCarFormContainer";
 import { render } from "@testing-library/react";
 import { Context } from "../App";
-import { properties } from "../resources/properties";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -95,11 +94,10 @@ function Cars() {
   const [adding, setAdding] = useState(false);
 
   const getCars = async () => {
-    await fetch(`${properties.url}/logic/api/cars`, {
+    await fetch("http://192.168.0.213:8080/logic/api/cars", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-type": "application/json; charset=UTF-8",
+        'Authorization': auth,
       },
     })
       .then((response) => {
@@ -123,7 +121,7 @@ function Cars() {
   }, []);
 
   const updateList = () => {
-    getCars();
+    //getCars();
   };
   const addClick = () => {
     render(<AddCarFormContainer updateList={updateList} />);
