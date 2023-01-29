@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Context } from "../App";
+import { RootStackParamList } from "../App";
 import {
   StyleSheet,
   TextInput,
@@ -11,28 +13,79 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export default function LoginView() {
-  const navigation = useNavigation();
+type LoginViewProps = NativeStackScreenProps<RootStackParamList, 'Login'>
+
+type Credentials = {
+  username: String,
+  password: String
+}
+
+export default function LoginView(props: LoginViewProps) {
+  const navigation = useNavigation()
+  const context = useContext(Context)
+  
+  const [credentials, setCredentials] = useState<Credentials>({ username : "", password : "" })
+  const [credInvalid, setCredInvalid] = useState(false)
+  const [store, setStore] = useState(context)
+
+  const handleLogin = async () => {
+    setCredInvalid(true)
+    await fetch('http://192.168.1.10:8080/authenticate', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then((response) => {
+      if (response.ok)
+          return response.json()
+      else{
+        throw new Error("ERROR " + response.status)
+      }
+    }).then((token) => {
+      setStore({jwtToken : token, isAdmin: store.isAdmin})
+      setCredInvalid(false)
+    }).catch((e) => {
+      setCredInvalid(true)
+      console.log("Error when trying to log in: " + e)
+    })
+  };
+
+  useEffect(() => {
+    if (!credInvalid) {
+      props.navigation.navigate('Menu')
+    }
+  }, [credInvalid])
+
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>carly</Text>
       <View>
         <View style={styles.usernameInput}>
           <Ionicons name="person-outline" size={30} color="black"/>
-          <TextInput placeholder="username" style={styles.textField} />
+          <TextInput placeholder="username" style={styles.textField} onChangeText={(username) => setCredentials({
+            username : username,
+            password: credentials.password
+            })}/>
         </View>
         <View style={styles.usernameInput}>
           <Ionicons name="ios-lock-closed-outline" size={30} color="black"/>
           <TextInput
             placeholder="password"
             secureTextEntry={true}
+            onChangeText={(password) => setCredentials({
+              username : credentials.username,
+              password: password
+              })}
             style={styles.textField}
           />
         </View>
+        { credInvalid ? <Text>{store.jwtToken}</Text> : <></> }
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("AdminMenu")}
+          onPress={handleLogin}
         >
           <Text style={styles.loginText}>login</Text>
         </Pressable>

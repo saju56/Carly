@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Montserrat_400Regular, useFonts } from '@expo-google-fonts/montserrat';
+import Collapsible from 'react-native-collapsible';
 
 type Booking = {
     id: String,
@@ -22,15 +23,16 @@ async function request<TResponse>( url: string, config: RequestInit = {} ): Prom
 
 export default function AdminBookingsView() {
   const [isLoading, setLoading] = useState(true);
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([])
   const [bookingsCount, setBookingsCount] = useState(0)
+  const [isCollapsed, setIsCollapsed] = useState(true)
 
 //   admin so all bookings
   const getBookings = async () => {
     try {
       setLoading(true);
       let response : Booking[] | null = []
-      await request<Booking[]>('http://192.168.1.10:8080/logic/api/bookings').then((bookings) => (response = bookings))
+      request<Booking[]>('http://192.168.1.10:8080/logic/api/bookings').then((bookings) => (response = bookings))
       setBookingsCount(Object.keys(response).length)
       setBookings(response)
     } catch(error){
@@ -52,21 +54,22 @@ export default function AdminBookingsView() {
                 <Text style={styles.headerTextBold}>bookings</Text>
             </View>
             <View>
-                <Pressable></Pressable>
+                <Pressable style={styles.button}>
+                    <Text style={styles.homeText}>home</Text>
+                </Pressable>
             </View>
         </View>
       <Text style={styles.infoText}>bookings found: {bookingsCount}</Text>
-      <Button title='home'></Button>
       <FlatList
             data={bookings}
             renderItem={({item}) => <>
-              <Text style={styles.container}>Booking id: {item.id}</Text>
-              <Text style={styles.container}>Car id: {item.carId}</Text>
-              <Text style={styles.container}>End date: {item.endDate}</Text>
-              <Text style={styles.container}>Start date: {item.startDate}</Text>
-              <Text style={styles.container}>User id: {item.userId}</Text>
-              
-            </>}
+                <Text style={styles.text}>Booking id: {item.id}</Text>
+                <Text style={styles.text}>Car id: {item.carId}</Text>
+                <Text style={styles.text}>End date: {item.endDate}</Text>
+                <Text style={styles.text}>Start date: {item.startDate}</Text>
+                <Text style={styles.text}>User id: {item.userId}</Text>
+            </>
+            }
             refreshControl={
               <RefreshControl refreshing={isLoading} onRefresh={getBookings} />
             }
@@ -84,7 +87,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#DADEEA',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    padding: 20
   },
   headerText:{
     fontSize: 40,
@@ -98,8 +102,33 @@ const styles = StyleSheet.create({
   },
   header: {
     display: 'flex',
+    width: '100%',
     flexWrap: 'nowrap',
     flexDirection: 'row',
-    alignItems: 'stretch'
+    alignContent: 'space-between'
+  },
+  button: {
+    height: 40,
+    width: 80,
+    margin: 12,
+    padding: 10,
+    borderRadius: 50,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  homeText:{
+
+  },
+  text: {
+    fontSize: 26
   }
 });
