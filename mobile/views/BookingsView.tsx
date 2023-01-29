@@ -1,13 +1,25 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import React, { useContext, useEffect, useState } from 'react'
-import { Button, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Montserrat_400Regular, useFonts } from '@expo-google-fonts/montserrat';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Context, RootStackParamList, UserAttributes } from '../App';
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Button,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Montserrat_400Regular, useFonts } from "@expo-google-fonts/montserrat";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Context, RootStackParamList, UserAttributes } from "../App";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { CarFilled } from "@ant-design/icons";
+import { CollapsedItem } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
-type BookingsViewProps = NativeStackScreenProps<RootStackParamList, 'Bookings'>
+type BookingsViewProps = NativeStackScreenProps<RootStackParamList, "Bookings">;
 
 type Booking = {
   id: String;
@@ -15,6 +27,22 @@ type Booking = {
   endDate: String;
   startDate: String;
   userId: String;
+};
+
+type Car = {
+  id: String;
+  brand: String;
+  model: String;
+  status: boolean;
+  seats: number;
+  doors: number;
+  fuelType: String;
+  mileage: number;
+  vin: number;
+  year: number;
+  pricePerDay: number;
+  city: String;
+  bodyType: String;
 };
 
 async function request<TResponse>(
@@ -26,76 +54,226 @@ async function request<TResponse>(
     .then((data) => data as TResponse);
 }
 
-export default function BookingsView({ route, navigation } : BookingsViewProps) {
-  const [isLoading, setLoading] = useState(true);
+export default function BookingsView({ route, navigation }: BookingsViewProps) {
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [bookingsCount, setBookingsCount] = useState(0)
-  const attributes : UserAttributes = route.params
+  const attributes: UserAttributes = route.params;
+  const [selectedId, setSelectedId] = useState<String>();
+  const [currCar, setCurrCar] = useState<Car>();
+  const [cost, setCost] = useState(0);
 
   //   admin so all bookings
   const getBookings = async () => {
-    setLoading(true);
-    await fetch('http://192.168.1.10:8080/logic/api/bookings', {
-      method: 'GET',
+    await fetch("http://192.168.0.213:8080/logic/api/bookings", {
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${attributes.token.jwttoken}`,
-        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: `Bearer ${attributes.token.jwttoken}`,
+        "Content-type": "application/json; charset=UTF-8",
       },
-    }).then((response) => {
-      if (response.ok)
-          return response.json()
-      else{
-        throw new Error("ERROR " + response.status)
-      }
-    }).then((bookings) => {
-      setBookings(bookings)
-      console.log("Success fetching bookings.")
-      setBookingsCount(Object.keys(bookings).length)
-    }).catch((e) => {
-      console.log("Error when trying to fetch bookings: " + e)
     })
-    setLoading(false)
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((bookings) => {
+        setBookings(bookings);
+        console.log("Success fetching bookings.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch bookings: " + e);
+      });
   };
 
   useEffect(() => {
     getBookings();
   }, []);
 
+  const handleExtension = async (
+    id: String,
+    carId: String,
+    userId: String,
+    startDate: String,
+    endDate: String
+  ) => {
+    setSelectedId(id);
+
+    await fetch("http://192.168.0.213:8080/logic/api/cars/" + carId, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${attributes.token.jwttoken}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((car) => {
+        setCurrCar(car);
+        console.log("Success fetching car.");
+        const d_from = new Date(startDate.substring(0, 10));
+        const d_to = new Date(endDate.substring(0, 10));
+        const utc1 = Date.UTC(
+          d_from.getFullYear(),
+          d_from.getMonth(),
+          d_from.getDate()
+        );
+        const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+        const utc2 = Date.UTC(
+          d_to.getFullYear(),
+          d_to.getMonth(),
+          d_to.getDate()
+        );
+        setCost((Math.floor(utc2 - utc1) / _MS_PER_DAY) * car.pricePerDay);
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch car: " + e);
+      });
+  };
+
+  const deleteHandling = async (id: String) => {
+    await fetch("http://192.168.0.213:8080/logic/api/bookings/" + id, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${attributes.token.jwttoken}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then(() => {
+        console.log("Booking deleted");
+      })
+      .catch((e) => {
+        console.log("Error when trying to delete booking: " + e);
+      });
+  };
+
   return (
     <View style={styles.container}>
-        <View style={styles.header}>
-            <View>
-                <Text style={styles.headerText}>current</Text>
-                <Text style={styles.headerTextBold}>bookings</Text>
-                <Text style={styles.infoText}>{}</Text>
-            </View>
-            <View>
-              <Pressable
-                style={styles.button}
-                onPress={() => navigation.navigate('Menu', attributes)}
-              >
-                <Text style={styles.menuText}>home</Text>
-              </Pressable>
-            </View>
+      <View style={styles.topBar}>
+        <View>
+          <Text style={styles.headerTextBold}>current</Text>
+          <Text style={styles.headerText}>bookings</Text>
         </View>
-      <Text style={styles.infoText}>bookings found: {bookingsCount}</Text>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate("Menu", attributes)}
+        >
+          <Text style={styles.menuText}>home</Text>
+        </Pressable>
+      </View>
       <FlatList
-            data={bookings}
-            renderItem={({item}) => <>
-              <Text style={styles.container}>Booking id: {item.id}</Text>
-              <Text style={styles.container}>Car id: {item.carId}</Text>
-              <Text style={styles.container}>End date: {item.endDate}</Text>
-              <Text style={styles.container}>Start date: {item.startDate}</Text>
-              <Text style={styles.container}>User id: {item.userId}</Text>
-              
-            </>}
-            refreshControl={
-              <RefreshControl refreshing={isLoading} onRefresh={getBookings} />
-            }
-            refreshing={isLoading}
-            maxToRenderPerBatch={7}
-            initialNumToRender={15}
-          />
+        style={styles.list}
+        contentContainerStyle={styles.listContainer}
+        data={bookings}
+        renderItem={({ item, index }) =>
+          item.id !== selectedId ? (
+            <Pressable
+              style={styles.listElement}
+              onPress={() =>
+                handleExtension(
+                  item.id,
+                  item.carId,
+                  item.userId,
+                  item.startDate,
+                  item.endDate
+                )
+              }
+            >
+              <Image
+                style={{ flex: 0.5, width: 100, height: 60 }}
+                source={{
+                  uri: `http://192.168.0.213:8080/logic/api/cars/${item.carId}/image2`,
+                }}
+              />
+              <View style={{ flex: 0.7, marginLeft: 10 }}>
+                <Text style={styles.headerCarTextBold}>booking no</Text>
+                <Text style={styles.headerCarText}>{index + 1}</Text>
+              </View>
+              <AntDesign name="right" size={40} style={{ margin: 10 }} />
+            </Pressable>
+          ) : (
+            <Pressable
+              style={styles_ext.listElement}
+              onPress={() => setSelectedId("")}
+            >
+              <View style={styles_ext.photoName}>
+                <Image
+                  style={styles_ext.image}
+                  source={{
+                    uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`,
+                  }}
+                />
+                <Text style={styles_ext.headerCarTextBold}>
+                  {currCar?.brand}
+                </Text>
+                <Text style={styles_ext.headerCarText}>{currCar?.model}</Text>
+              </View>
+              <View style={styles_ext.info}>
+                <View>
+                  <Text style={styles_ext.textB}>vin:</Text>
+                  <Text style={styles_ext.textB}>booking no:</Text>
+                  <Text style={styles_ext.textB}>name:</Text>
+                  <Text style={styles_ext.textB}>surname:</Text>
+                  <Text style={styles_ext.textB}>from:</Text>
+                  <Text style={styles_ext.textB}>to:</Text>
+                </View>
+                <View>
+                  <Text style={styles_ext.text}>{currCar?.vin}</Text>
+                  <Text style={styles_ext.text}>{index + 1}</Text>
+                  <Text style={styles_ext.text}>Szymon</Text>
+                  <Text style={styles_ext.text}>Slusarz</Text>
+                  <Text style={styles_ext.text}>
+                    {item.startDate.substring(0, 10)}
+                  </Text>
+                  <Text style={styles_ext.text}>
+                    {item.endDate.substring(0, 10)}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ flexDirection: "column" }}>
+                  <View
+                    style={{ flexDirection: "row", alignItems: "flex-end" }}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: 30 }}>
+                      ${cost}/
+                    </Text>
+                    <Text style={{ fontWeight: "normal", fontSize: 20 }}>
+                      booking
+                    </Text>
+                  </View>
+                  <Pressable
+                    style={styles_ext.cancelButton}
+                    onPress={() => deleteHandling(item.id)}
+                  >
+                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                      cancel
+                    </Text>
+                  </Pressable>
+                </View>
+                <AntDesign name="up" size={60} style={{ margin: 10 }} />
+              </View>
+            </Pressable>
+          )
+        }
+        maxToRenderPerBatch={7}
+        initialNumToRender={15}
+      />
     </View>
   );
 }
@@ -103,13 +281,10 @@ export default function BookingsView({ route, navigation } : BookingsViewProps) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#DADEEA',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%'
-  },
-  header: {
-    
+    backgroundColor: "#DADEEA",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   headerText: {
     fontSize: 35,
@@ -224,17 +399,19 @@ const styles_ext = StyleSheet.create({
     alignItems: "center",
   },
   textB: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
   },
   text: {
-    fontSize: 25,
+    fontSize: 20,
     textAlign: "right",
   },
-  header: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    flexDirection: 'row',
-    alignItems: 'stretch'
-  }
+  cancelButton: {
+    width: 210,
+    height: 40,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+  },
 });
