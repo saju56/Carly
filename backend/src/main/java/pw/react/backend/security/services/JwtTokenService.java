@@ -12,6 +12,7 @@ import pw.react.backend.models.Token;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class JwtTokenService implements Serializable {
 
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        return expiration.getTime() < Instant.now().toEpochMilli();
     }
 
     public String generateToken(UserDetails userDetails, HttpServletRequest request) {
@@ -103,7 +104,7 @@ public class JwtTokenService implements Serializable {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .setExpiration(new Date(Instant.now().toEpochMilli() + expirationMs))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
