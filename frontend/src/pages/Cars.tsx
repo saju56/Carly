@@ -97,7 +97,7 @@ function Cars() {
     await fetch("http://192.168.0.213:8080/logic/api/cars", {
       method: "GET",
       headers: {
-        'Authorization': auth,
+        'Authorization': `Bearer ${token}`,
       },
     })
       .then((response) => {
