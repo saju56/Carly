@@ -2,6 +2,7 @@ package pw.react.backend.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import pw.react.backend.dao.CarRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Car;
@@ -73,13 +74,16 @@ public class CarMainService implements CarService{
 
     @Override
     public List<CarDto> getAvailableCarsForRequest(OffersRequest offersRequest) {
+        boolean sortAscending = offersRequest.sortBy().isBlank() || offersRequest.sortBy().charAt(0) != '-';
         return repository.findAvailableCarsForIntervalAndBodyTypeSortBy(
                 offersRequest.dateFrom(),
                 offersRequest.dateTo(),
-                offersRequest.sortBy(),
                 offersRequest.bodyType(),
                 offersRequest.location(),
-                offersRequest.model())
+                offersRequest.model(),
+                sortAscending ?
+                        Sort.by(offersRequest.sortBy()).ascending() :
+                        Sort.by(offersRequest.sortBy().substring(1)).descending())
                 .stream().map(CarDto::valueFrom)
                 .toList();
     }

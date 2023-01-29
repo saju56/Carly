@@ -11,6 +11,7 @@ import pw.react.backend.services.data.OffersRequest;
 import pw.react.backend.web.CarDto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,23 +36,19 @@ public class OfferController extends AbstractController {
     public ResponseEntity<Collection<CarDto>> getOffers(
             @RequestHeader HttpHeaders headers,
             @RequestParam(value = "location", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String location,
-            @RequestParam LocalDateTime dateFrom,
-            @RequestParam LocalDateTime dateTo,
+            @RequestParam Long dateFrom,
+            @RequestParam Long dateTo,
             @RequestParam(value = "sortBy", required = false, defaultValue = DEFAULT_SORT) String sortBy,
             @RequestParam Integer page,
             @RequestParam Integer itemsOnPage,
             @RequestParam(value = "bodyType", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String bodyType,
             @RequestParam(value = "model", required = false, defaultValue = NO_STRING_TYPE_PARAMETER) String model)
             throws BadRequestException {
-
-        if (dateFrom == null) {
-            dateFrom = LocalDateTime.now();
-        }
-        if (dateTo == null) {
-            dateTo = LocalDateTime.now().plusHours(1L);
-        }
+        // example for reference: 1643500000 => 2022-01-29T23:46:40
+        LocalDateTime dateTimeFrom = LocalDateTime.ofEpochSecond(dateFrom, 0, ZoneOffset.UTC);
+        LocalDateTime dateTimeTo = LocalDateTime.ofEpochSecond(dateTo, 0, ZoneOffset.UTC);
         logHeaders(headers, logger);
-        OffersRequest request = new OffersRequest(location, dateFrom, dateTo, sortBy,
+        OffersRequest request = new OffersRequest(location, dateTimeFrom, dateTimeTo, sortBy,
                 page, itemsOnPage, bodyType, model);
         List<CarDto> result = offerService.getOffersByOfferRequest(request);
         return ResponseEntity.ok().body(result);
