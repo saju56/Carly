@@ -63,6 +63,7 @@ public class CarController extends AbstractController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    //@CrossOrigin(origins = { "http://localhost:3000/Cars", "http://localhost:3000/" })
     @Operation(summary = "Get all cars")
     @GetMapping(path = "")
     public ResponseEntity<Collection<CarDto>> getAllCars(@RequestHeader HttpHeaders headers) {

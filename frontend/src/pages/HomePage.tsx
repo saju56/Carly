@@ -29,7 +29,6 @@ function HomePage  ()  {
   const handleLogin = async () => {
     setCredInvalid(true)
     await fetch(properties.url+'/authenticate', {
-    await fetch('http://192.168.0.213:8080/authenticate', {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: {
