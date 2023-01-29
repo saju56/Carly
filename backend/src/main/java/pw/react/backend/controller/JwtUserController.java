@@ -1,5 +1,6 @@
 package pw.react.backend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -33,6 +34,7 @@ public class JwtUserController {
         userService.setPasswordEncoder(passwordEncoder);
     }
 
+    @Operation(summary = "Create new user with password encryption")
     @PostMapping(path = "")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         User user = UserDto.convertToUser(userDto);
