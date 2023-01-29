@@ -1,5 +1,6 @@
 package pw.react.backend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.undertow.util.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class OfferController extends AbstractController {
         this.offerService = offerService;
     }
 
+    @Operation(summary = "Get List of offers by parameters")
     @GetMapping(path = "")
     public ResponseEntity<Collection<CarDto>> getOffers(
             @RequestHeader HttpHeaders headers,

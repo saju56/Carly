@@ -44,6 +44,7 @@ public class CarController extends AbstractController {
         this.carImageService = carImageService;
     }
 
+    @Operation(summary = "Get car by Id")
     @GetMapping(path = "/{carId}")
     public ResponseEntity<CarDto> getCar(@RequestHeader HttpHeaders headers, @PathVariable UUID carId)
             throws ResourceNotFoundException {
@@ -52,6 +53,7 @@ public class CarController extends AbstractController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Create list of cars")
     @PostMapping(path = "")
     public ResponseEntity<Collection<CarDto>> createCar(@RequestHeader HttpHeaders headers,
                                                                   @Valid @RequestBody List<CarDto> cars) {
@@ -61,12 +63,14 @@ public class CarController extends AbstractController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    @Operation(summary = "Get all cars")
     @GetMapping(path = "")
     public ResponseEntity<Collection<CarDto>> getAllCars(@RequestHeader HttpHeaders headers) {
         logHeaders(headers, log);
         return ResponseEntity.ok(carService.getAllCars());
     }
 
+    @Operation(summary = "Update car by Id")
     @PutMapping(path = "/{carId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCar(@RequestHeader HttpHeaders headers, @PathVariable UUID carId,
@@ -75,6 +79,7 @@ public class CarController extends AbstractController {
         carService.updateCar(carId, CarDto.convertToCar(updatedCar));
     }
 
+    @Operation(summary = "Delete car by Id")
     @DeleteMapping(path = "/{carId}")
     public ResponseEntity<String> deleteCar(@RequestHeader HttpHeaders headers, @PathVariable UUID carId) {
         logHeaders(headers, log);
@@ -85,6 +90,7 @@ public class CarController extends AbstractController {
         return ResponseEntity.ok(String.format("Car with id %s deleted.", carId));
     }
 
+    @Operation(summary = "Upload image for a car")
     @PostMapping("/{carId}/image")
     public ResponseEntity<UploadFileResponse> uploadImage(@RequestHeader HttpHeaders headers,
                                                          @PathVariable UUID carId,
@@ -105,6 +111,7 @@ public class CarController extends AbstractController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(summary = "Get image in bytes for a car")
     @GetMapping(value = "/{carId}/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody byte[] getImage(@RequestHeader HttpHeaders headers, @PathVariable UUID carId) {
         logHeaders(headers, log);

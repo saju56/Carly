@@ -1,5 +1,6 @@
 package pw.react.backend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,14 @@ public class BookingController extends AbstractController {
         this.bookingService = bookingService;
     }
 
-    // Returns a list of all booking records
+    @Operation(summary = "Get list of all bookings")
     @GetMapping(path = "")
     public ResponseEntity<Collection<BookingDto>> getAllBookings(@RequestHeader HttpHeaders headers) {
         logHeaders(headers, logger);
         return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
+    @Operation(summary = "Create list of bookings")
     @PutMapping(path = "")
     public ResponseEntity<Collection<BookingDto>> createBookings(@RequestHeader HttpHeaders headers,
                                                                   @Valid @RequestBody List<BookingDto> bookingDtos) {
@@ -51,7 +53,7 @@ public class BookingController extends AbstractController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    // Provides info about booking as JSON, if it doesn't exist return 404
+    @Operation(summary = "Provides info about booking as JSON, if it doesn't exist return 404")
     @GetMapping(path = "/{id}")
     public ResponseEntity<BookingDto> getBooking(@RequestHeader HttpHeaders headers, @PathVariable UUID id)
             throws ResourceNotFoundException {
@@ -62,6 +64,7 @@ public class BookingController extends AbstractController {
     }
 
     // Creates a new booking from supplied data (JSON)
+    @Operation(summary = "Create new booking")
     @PostMapping(path = "")
     public ResponseEntity<BookingDto> createBooking(@RequestHeader HttpHeaders headers,
                                                     @Valid @RequestBody BookingDto bookingDto) {
@@ -72,6 +75,7 @@ public class BookingController extends AbstractController {
     }
 
     // Update booking using supplied JSON
+    @Operation(summary = "Update booking by Id")
     @PostMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBooking(@RequestHeader HttpHeaders headers, @PathVariable UUID id,
@@ -81,6 +85,7 @@ public class BookingController extends AbstractController {
     }
 
     // Removes booking from repository
+    @Operation(summary = "Remove booking by Id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> removeBooking(@RequestHeader HttpHeaders headers, @PathVariable UUID id)
             throws NotifyFailedException {
