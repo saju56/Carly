@@ -21,8 +21,6 @@ public class Car {
     @Column
     private String model;
     @Column
-    private boolean isTaken;
-    @Column
     private int seats;
     @Column
     private int doors;
@@ -63,13 +61,6 @@ public class Car {
 
     public void setCarModel(String model) {
         this.model = model;
-    }
-    public boolean getStatus() {
-        return isTaken;
-    }
-
-    public void setStatus(boolean isTaken) {
-        this.isTaken = isTaken;
     }
 
     public int getSeats() {
