@@ -28,6 +28,7 @@ import { Booking } from "../model/Booking";
 import { Context } from "../App";
 /* READ DATA FOR TESTING ONLY  */
 import { maxHeaderSize } from "http";
+import { properties } from "../resources/properties";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -88,7 +89,7 @@ function Bookings() {
   const [loading, setLoading] = useState(false);
 
   const getBookings = async () => {
-    await fetch("http://192.168.0.213:8080/logic/api/bookings", {
+    await fetch(`${properties.url}/logic/api/bookings`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -113,17 +114,12 @@ function Bookings() {
   useEffect(() => {
     getBookings();
   }, []);
-  /*
+  
 const updateList = () => {
-    getBookings()
-        .then(bookings => setBookings(bookings))
-        .catch(e => console.error(JSON.stringify(e)))
-        .finally(()=>setLoading(false))
+    getBookings();
 }
 
- 
-*/
-  const updateList = () => {};
+
 
   return (
     // Top bar
