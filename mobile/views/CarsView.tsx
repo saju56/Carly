@@ -8,7 +8,7 @@ import {
   Text,
   View,
   Pressable,
-  Image
+  Image,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -31,7 +31,7 @@ type Car = {
   bodyType: String;
 };
 
-type CarsViewProps = NativeStackScreenProps<RootStackParamList, 'Cars'>
+type CarsViewProps = NativeStackScreenProps<RootStackParamList, "Cars">;
 
 async function request<TResponse>(
   url: string,
@@ -42,21 +42,32 @@ async function request<TResponse>(
     .then((data) => data as TResponse);
 }
 
-export default function CarsView({route, navigation} : CarsViewProps) {
+export default function CarsView({ route, navigation }: CarsViewProps) {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedId, setSelectedId] = useState<String>();
-  const attributes : UserAttributes = route.params
+  const attributes: UserAttributes = route.params;
 
   const getCars = async () => {
-    try {
-      let response: Car[] | null = [];
-      await request<Car[]>("http://192.168.0.213:8080/logic/api/cars").then(
-        (cars) => (response = cars)
-      );
-      setCars(response);
-    } catch (error) {
-      console.error(error);
-    }
+    await fetch("http://192.168.0.213:8080/logic/api/cars", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${attributes.token.jwttoken}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((cars) => {
+        setCars(cars);
+        console.log("Success fetching cars.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch cars: " + e);
+      });
   };
 
   useEffect(() => {
@@ -72,7 +83,7 @@ export default function CarsView({route, navigation} : CarsViewProps) {
         </View>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate('Menu', attributes)}
+          onPress={() => navigation.navigate("Menu", attributes)}
         >
           <Text style={styles.menuText}>home</Text>
         </Pressable>
@@ -87,7 +98,12 @@ export default function CarsView({route, navigation} : CarsViewProps) {
               style={styles.listElement}
               onPress={() => setSelectedId(item.id)}
             >
-              <Image style={{flex: 0.5, width: 100, height: 60}} source={{uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`}}/>
+              <Image
+                style={{ flex: 0.5, width: 100, height: 60 }}
+                source={{
+                  uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`,
+                }}
+              />
               <View style={{ flex: 0.7, marginLeft: 10 }}>
                 <Text style={styles.headerCarTextBold}>{item.brand}</Text>
                 <Text style={styles.headerCarText}>{item.model}</Text>
@@ -100,7 +116,12 @@ export default function CarsView({route, navigation} : CarsViewProps) {
               onPress={() => setSelectedId("")}
             >
               <View style={styles_ext.photoName}>
-                <Image style={styles_ext.image} source={{uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`}}/>
+                <Image
+                  style={styles_ext.image}
+                  source={{
+                    uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`,
+                  }}
+                />
                 <Text style={styles_ext.headerCarTextBold}>{item.brand}</Text>
                 <Text style={styles_ext.headerCarText}>{item.model}</Text>
               </View>
