@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pw.react.backend.dao.CarRepository;
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Car;
+import pw.react.backend.services.data.OffersRequest;
 import pw.react.backend.web.CarDto;
 
 import java.util.List;
@@ -68,5 +69,18 @@ public class CarMainService implements CarService{
     @Override
     public CarDto saveCar(Car car) {
         return CarDto.valueFrom(repository.save(car));
+    }
+
+    @Override
+    public List<CarDto> getAvailableCarsForRequest(OffersRequest offersRequest) {
+        return repository.findAvailableCarsForIntervalAndBodyTypeSortBy(
+                offersRequest.dateFrom(),
+                offersRequest.dateTo(),
+                offersRequest.sortBy(),
+                offersRequest.bodyType(),
+                offersRequest.location(),
+                offersRequest.model())
+                .stream().map(CarDto::valueFrom)
+                .toList();
     }
 }

@@ -2,6 +2,7 @@ package pw.react.backend.services;
 
 import pw.react.backend.exceptions.ResourceNotFoundException;
 import pw.react.backend.models.Car;
+import pw.react.backend.services.data.OffersRequest;
 import pw.react.backend.web.CarDto;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface CarService {
     List<CarDto> saveManyCars(List<Car> cars);
     CarDto getCarById(UUID id);
     CarDto saveCar(Car car);
+    List<CarDto> getAvailableCarsForRequest(OffersRequest offersRequest);
 }
