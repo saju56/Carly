@@ -20,7 +20,6 @@ import { Booking } from '../model/Booking';
  /* READ DATA FOR TESTING ONLY  */
  import bookings_ from './data2.json';
 import { maxHeaderSize } from 'http';
-import { getBookings } from '../logic/api';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -62,26 +61,51 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+async function request<TResponse>(
+  url: string,
+  config: RequestInit = {}
+): Promise<TResponse> {
+  return await fetch(url, config)
+    .then((response) => response.json())
+    .then((data) => data as TResponse);
+}
 
 function Bookings () {
-  let navigate = useNavigate();
-
+  //const attributes: UserAttributes = route.params;
   const [sort, setSort] = React.useState('');
   const handleSortChange = (event: SelectChangeEvent) => {
     setSort(event.target.value);
   };
 
-  const [bookings, setBookings] = useState(bookings_);
-  //const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
+/*
+  const getBookings = async () => {
+    await fetch("http://192.168.0.213:8080/logic/api/bookings", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${attributes.token.jwttoken}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((bookings) => {
+        setBookings(bookings);
+        console.log("Success fetching bookings.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch bookings: " + e);
+      });
+  };
 
-  /*
-  useEffect(()=> {
-    getBookings()
-        .then(bookings => setBookings(bookings))
-        .catch(e => console.error(JSON.stringify(e)))
-        .finally(()=>setLoading(false))
-  },[])
+  useEffect(() => {
+    getBookings();
+  }, []);
 
 const updateList = () => {
     getBookings()

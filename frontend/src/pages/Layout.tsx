@@ -1,6 +1,6 @@
 import { AppBar, Button,  Divider,  Drawer, IconButton,  List,  ListItem,  ListItemButton,  ListItemIcon,  ListItemText,  Menu, MenuItem, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Cars from './Cars';
 import Bookings from './Bookings';
 import { styled, useTheme } from '@mui/material/styles';
@@ -8,10 +8,12 @@ import { Link } from "react-router-dom";
 import React from "react";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Context } from "../App";
 
 function Layout() {
+  const {token, setToken} = useContext(Context);
+  
   return (
-
   <Drawer
         sx={{
           width: '150px',
@@ -30,9 +32,10 @@ function Layout() {
           </Typography>
         </Toolbar>
         <Divider/>
+        {token==='' ? <List/> :
         <List>
-            <ListItem component={Link} to={`/Cars`}  disablePadding>
-              <ListItemButton>
+            <ListItem component={Link} to={`/Cars`}  disablePadding> 
+              <ListItemButton >
                 <Button
                     size="large"
                     style={{color: 'black'}}
@@ -52,6 +55,7 @@ function Layout() {
               </ListItemButton>
             </ListItem>
         </List>
+        }
       </Drawer>
   );
 }

@@ -21,7 +21,6 @@ import { maxHeaderSize } from 'http';
 import AddCarForm from '../components/AddCarForm';
 import AddCarFormContainer from '../components/AddCarFormContainer';
 import { render } from '@testing-library/react';
-import { getCars } from '../logic/api';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',

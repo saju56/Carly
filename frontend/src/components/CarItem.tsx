@@ -3,7 +3,6 @@ import {Car} from "../model/Car";
 import Loader from "../utils/Loader";
 import { updateCommaList } from 'typescript';
 import { Box, Button, Card, CardMedia, Grid, makeStyles, styled, TextField, Typography } from '@mui/material';
-import { deleteCar } from '../logic/api';
 
 
 
@@ -45,10 +44,10 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
 
     const deleteHandle = () => {
         setDeleting(true);
-        deleteCar(props.car.id)
-            .then(()=>props.updateList())
-            .catch(e=>console.error(JSON.stringify(e)))
-            .finally(()=>setDeleting(false))
+       // deleteCar(props.car.id)
+       //     .then(()=>props.updateList())
+        //    .catch(e=>console.error(JSON.stringify(e)))
+         //   .finally(()=>setDeleting(false))
     }
     
     return (

@@ -1,10 +1,11 @@
 import {Key} from "react";
 
 export interface Booking {
-    "id": Key,
-    "brand": string,
-    "model": string,
-    "name": string,
-    "surname": string,
+    "id": String,
+    "carId": String,
+    "endDate": String,
+    "startDate": String,
+    "userId": String
+      
 }
 

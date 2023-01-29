@@ -3,7 +3,6 @@ import {Booking} from "../model/Booking";
 import Loader from "../utils/Loader";
 import { updateCommaList } from 'typescript';
 import { Box, Button, Card, CardMedia, Grid, makeStyles, styled, Typography } from '@mui/material';
-import { deleteCar } from '../logic/api';
 
 
 
@@ -20,15 +19,15 @@ const RightText = styled(Typography)({
     textAlign: "right"
   });
 
-const EmployeeListItem: React.FC<BookingItemProps> = (props: BookingItemProps) => {
+const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) => {
     const [deleting, setDeleting] = useState(false);
     
     const deleteHandle = () => {
         setDeleting(true);
-        deleteCar(props.booking.id)
-            .then(()=>props.updateList())
-            .catch(e=>console.error(JSON.stringify(e)))
-            .finally(()=>setDeleting(false))
+        //deleteCar(props.booking.id)
+         //   .then(()=>props.updateList())
+          //  .catch(e=>console.error(JSON.stringify(e)))
+           // .finally(()=>setDeleting(false))
     }
     
     const theme = {
@@ -47,13 +46,13 @@ const EmployeeListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =
                                                 alt="Car photo"
                                                 width="40px"
                                                 ></CardMedia>
-                                    <LeftText variant='h4' sx={{fontWeight: 'bold'}}>{props.booking.brand}</LeftText>
-                                    <LeftText variant='h5'>{props.booking.model}</LeftText>
+                                    <LeftText variant='h4' sx={{fontWeight: 'bold'}}>{props.booking.id}</LeftText>
+                                    <LeftText variant='h5'>{props.booking.id}</LeftText>
                                 </Grid>
                                 <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <LeftText sx={{fontWeight: 'bold'}}>booking no. {props.booking.id}</LeftText>  
                                     <LeftText>vin: {props.booking.id}</LeftText>
-                                    <LeftText>for: {props.booking.name} {props.booking.surname}</LeftText>
+                                    <LeftText>for: {props.booking.id} {props.booking.id}</LeftText>
                                     <LeftText>from: {props.booking.id}</LeftText>
                                     <LeftText>to: {props.booking.id}</LeftText>
 
@@ -79,4 +78,4 @@ const EmployeeListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =
 
 
 
-export default EmployeeListItem;
+export default BookingListItem;

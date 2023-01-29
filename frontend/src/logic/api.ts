@@ -4,6 +4,10 @@ import {Key} from "react";
 
 const BASE_URL = 'https://carly-backend-app.azurewebsites.net';
 
+
+
+
+/*
 export const getCars = async () => {
     return fetch(`${BASE_URL}/logic/api/cars`)
          .then(response => {
@@ -57,3 +61,4 @@ export const deleteBookings = async (id: Key) => {
             else throw response;
         })
 }
+*/
