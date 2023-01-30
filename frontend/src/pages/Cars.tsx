@@ -8,11 +8,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import "./Cars.css";
 import {
+  Checkbox,
   Fab,
   FormControl,
   Grid,
   InputLabel,
+  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
@@ -75,25 +78,64 @@ async function request<TResponse>(
     .then((data) => data as TResponse);
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const bodyT = [
+  'cabriolet',
+  'coupé',
+  'hatchback',
+  'limousine',
+  'minivan',
+  'pickup',
+  'sedan',
+  'roadster',
+];
+
 function Cars() {
   let navigate = useNavigate();
   const { token, setToken } = useContext(Context);
 
   const [sort, setSort] = React.useState("");
+  const [search, setSearch] = React.useState("");
 
   const handleSortChange = (event: SelectChangeEvent) => {
     setSort(event.target.value);
+    sortCars();
   };
+
 
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
 
+  const [bodyType_, setBodyType_] = useState<string[]>([]);
+   // tutaj są kryteria filtrowania
+
+   const handleChange = (event: SelectChangeEvent<typeof bodyType_>) => {
+    const {
+      target: { value },
+    } = event;
+    setBodyType_(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+
   const getCars = async () => {
     await fetch(`${properties.url}/logic/api/cars`, {
       method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -112,9 +154,62 @@ function Cars() {
       });
   };
 
+  const sortCars = async () => {
+    await fetch(`${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=${sort}&page=0&itemsOnPage=4&25`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((cars) => {
+        setCars(cars);
+
+        console.log("Success fetching cars.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch cars: " + e);
+      });
+  };
+
+  const searchCars = async () => {
+    await fetch(
+      `${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=brand&page=0&itemsOnPage=4&model=${search}%25`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((cars) => {
+        setCars(cars);
+
+        console.log("Success fetching cars.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch cars: " + e);
+      });
+  };
+
   useEffect(() => {
-    getCars();
-  }, []);
+    if (search === "") {
+      getCars();
+    } else {
+      searchCars();
+    }
+  }, [search]);
 
   const updateList = () => {
     getCars();
@@ -122,7 +217,6 @@ function Cars() {
   const addClick = () => {
     render(<AddCarFormContainer updateList={updateList} />);
   };
-
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -151,6 +245,31 @@ function Cars() {
           </div>
 
           <Grid container justifyContent="flex-end">
+            {/* filter by functionality */}
+            <Grid item direction="column" alignItems="center">
+            <FormControl sx={{ m: 1, width: 120 }} size="small">
+        <InputLabel id="demo-multiple-checkbox-label">body type</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={bodyType_}
+          onChange={handleChange}
+          input={<OutlinedInput label="body type" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {bodyT.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={bodyType_.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+            </Grid>
+
+
             {/* sort by functionality  */}
             <Grid item direction="column" alignItems="center">
               <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -185,8 +304,9 @@ function Cars() {
                   <SearchIcon style={{ color: "black" }} />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Search…"
+                  placeholder="Search by model…"
                   inputProps={{ "aria-label": "search" }}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </Search>
             </Grid>

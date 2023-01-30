@@ -21,7 +21,7 @@ const AddCarFormContainer: React.FC<AddCarProps> = (props: AddCarProps) => {
           headers: {
             'Authorization': `Bearer ${token}`,
             "Content-type": "application/json; charset=UTF-8",
-          body: JSON.stringify(car)
+          body: `[`+JSON.stringify(car)+`]`
           },
         })
           .then((response) => {

@@ -6,8 +6,6 @@ import { Context } from '../App';
 import { properties } from '../resources/properties';
 import { Car } from '../model/Car';
 
-
-
 export interface BookingItemProps {
     booking: Booking;
     updateList: () => void;

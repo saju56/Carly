@@ -42,7 +42,7 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
   const handleSubmit = () => {
     if (
       isStringValid(addedCar.brand) &&
-      isStringValid(addedCar.bodyType) &&
+      isBodyTypeValid(addedCar.bodyType) &&
       isStringValid(addedCar.city) &&
       isNumberValid(addedCar.doors) &&
       isStringValid(addedCar.fuelType) &&
@@ -62,7 +62,7 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
   const isStringValid = (str: String) => str.length > 1;
   const isNumberValid = (num: Number) => num > 0;
   const isYearValid = (num: Number) => num > 1900 && num < 2023;
-
+  const isBodyTypeValid = (str: String) => str.includes("cabriolet" || "coupé" || "hatchback" || "limousine" ||  "minivan" || "pickup" || "sedan" || "roadster")
   return (
     <Dialog open={open}>
       <Grid container>
@@ -126,7 +126,7 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
                 label="body type"
                 variant="filled"
                 required
-                error={!isStringValid(addedCar.bodyType)}
+                error={!isBodyTypeValid(addedCar.bodyType)}
               />
             </Card>
           </Box>
