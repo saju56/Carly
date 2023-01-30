@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import pw.react.backend.dao.*;
+import pw.react.backend.dao.BookingRepository;
+import pw.react.backend.dao.CarImageRepository;
+import pw.react.backend.dao.CarRepository;
+import pw.react.backend.dao.UserRepository;
 import pw.react.backend.web.utils.UpdateNotifier;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +46,10 @@ public class MainConfig {
         for (Map.Entry<String, String> entry : envPropertiesMap.entrySet()) {
             log.debug("[{}] : [{}]", entry.getKey(), entry.getValue());
         }
+    }
+    @PostConstruct
+    void setGlobalSecurityContext() {
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
 
     @Bean
