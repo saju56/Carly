@@ -55,14 +55,15 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
               }
             })
             .then(() => {
-              props.updateList();
               console.log("Success editing car.");
             })
             .catch((e) => {
               console.log("Error when trying to edit car: " + e);
             })
-            .finally(()=>
-              setEditing(false));
+            .finally(()=> {
+                props.updateList();
+              setEditing(false);
+            });
     }
 
     
