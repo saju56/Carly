@@ -11,9 +11,7 @@ export interface AddCarProps {
 }
 
 const AddCarFormContainer: React.FC<AddCarProps> = (props: AddCarProps) => {
-    const [adding, setAdding] = useState(false);
     const [saving, setSaving] = useState(false);
-
 
     const addCar = async (car: Car, token: String) => {
         const auth = `Bearer ${token}`;
@@ -53,11 +51,6 @@ const AddCarFormContainer: React.FC<AddCarProps> = (props: AddCarProps) => {
             console.log("Error when trying to add car: " + e);
           })
       };
-
-    // const addCarImage = async (img: String) => {
-    //     await fetch()
-    // }
-
 
     return (
         <Loader loading={saving} label={"Saving"}>
