@@ -99,7 +99,7 @@ public class CarController extends AbstractController {
         CarImage carImage = carImageService.storeImage(carId, file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/cars/" + carId + "/image/")
+                .path("/cars/image/"+ carId+"/")
                 .path(carImage.getFileName())
                 .toUriString();
         UploadFileResponse response = new UploadFileResponse(

@@ -62,7 +62,7 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
     }
     
     const getOneCar = async()=> {
-        await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${props.booking.carId}`, {
+        await fetch(properties.url+`/logic/api/cars/${props.booking.carId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
