@@ -65,6 +65,8 @@ public class WebJwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/authenticate").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/logic/api/cars/image").permitAll()
+                .antMatchers(HttpMethod.GET,"/logic/api/cars/image2").permitAll()
                 .antMatchers( "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 // all other requests need to be authenticated
                 .anyRequest().authenticated();

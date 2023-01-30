@@ -91,7 +91,7 @@ public class CarController extends AbstractController {
     }
 
     @Operation(summary = "Upload image for a car")
-    @PostMapping("/{carId}/image")
+    @PostMapping("/image/{carId}")
     public ResponseEntity<UploadFileResponse> uploadImage(@RequestHeader HttpHeaders headers,
                                                          @PathVariable UUID carId,
                                                          @RequestParam("file") MultipartFile file) {
@@ -112,7 +112,7 @@ public class CarController extends AbstractController {
     }
 
     @Operation(summary = "Get image in bytes for a car")
-    @GetMapping(value = "/{carId}/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/image/{carId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody byte[] getImage(@RequestHeader HttpHeaders headers, @PathVariable UUID carId) {
         logHeaders(headers, log);
         CarImage carImage = carImageService.getCarImage(carId);
@@ -132,7 +132,7 @@ public class CarController extends AbstractController {
             )
     })
     //nwm po co to w sumie
-    @GetMapping(value = "/{carId}/image2")
+    @GetMapping(value = "/image2/{carId}")
     public ResponseEntity<Resource> getImage2(@RequestHeader HttpHeaders headers, @PathVariable UUID carId) {
         logHeaders(headers, log);
         CarImage carImage = carImageService.getCarImage(carId);
@@ -157,7 +157,7 @@ public class CarController extends AbstractController {
             )
     })
 
-    @DeleteMapping(value = "/{carId}/image")
+    @DeleteMapping(value = "/image/{carId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeImage(@RequestHeader HttpHeaders headers, @PathVariable UUID carId) {
         logHeaders(headers, log);

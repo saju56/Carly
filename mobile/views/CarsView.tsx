@@ -1,8 +1,5 @@
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -11,12 +8,11 @@ import {
   Image,
   RefreshControl,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, UserAttributes } from "../App";
 
-type Car = {
+export type Car = {
   id: String;
   brand: String;
   model: String;
@@ -32,22 +28,42 @@ type Car = {
   bodyType: String;
 };
 
-type CarsViewProps = NativeStackScreenProps<RootStackParamList, "Cars">;
-
-async function request<TResponse>(
-  url: string,
-  config: RequestInit = {}
-): Promise<TResponse> {
-  return await fetch(url, config)
-    .then((response) => response.json())
-    .then((data) => data as TResponse);
+export type ImageURL = {
+  uri: string
 }
+
+type CarsViewProps = NativeStackScreenProps<RootStackParamList, "Cars">;
 
 export default function CarsView({ route, navigation }: CarsViewProps) {
   const [cars, setCars] = useState<Car[]>([])
   const [selectedId, setSelectedId] = useState<String>()
   const [isLoading, setIsLoading] = useState(false)
+  const [carImages, setCarImages] = useState<ImageURL[]>([])
   const attributes: UserAttributes = route.params
+
+  const getCarImage = async (carId: String) => {
+    console.log(carId)
+    await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${attributes.token.jwttoken}`,
+            'Content-Type': 'application/octet-stream'
+        }
+    }).then((response) => {
+        if (response.ok) return response.blob()
+        else throw new Error("ERROR " + response.status)
+    }).then((data) => {
+        console.log(data)
+        const reader = new FileReader()
+        reader.readAsDataURL(data)
+        if (reader.result !== null) {
+          setCarImages(carImages => [...carImages, { uri: reader.result as string}])
+        }
+        console.log("Success fetching car image.")
+    }).catch((e) => {
+        console.log("Error when trying to fetch car image: " + e)
+    })
+  }
 
   const getCars = async () => {
     setIsLoading(true)
@@ -73,6 +89,12 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
     getCars()
   }, [])
 
+  useEffect(() => {
+    cars.forEach(async (car) => [
+      await getCarImage(car.id)
+    ])
+  }, [cars])
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -81,10 +103,13 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
           <Text style={styles.headerText}>cars</Text>
         </View>
         <Pressable
-          style={styles.button}
           onPress={() => navigation.navigate("Menu", attributes)}
-        >
-          <Text style={styles.menuText}>home</Text>
+          style={({ pressed }) => [{ borderColor: pressed ? 'transparent' : 'black' }, { backgroundColor: pressed ? 'black' : 'transparent' }, styles.button ]}>
+          {({ pressed }) => (
+            <Text style={[{ color: pressed ? 'white' : 'black' }, styles.menuText]}>
+              home
+            </Text>
+          )}
         </Pressable>
       </View>
       <FlatList
@@ -94,7 +119,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
         }
         contentContainerStyle={styles.listContainer}
         data={cars}
-        renderItem={({ item }) =>
+        renderItem={({ item, index }) =>
           item.id !== selectedId ? (
             <Pressable
               style={styles.listElement}
@@ -102,9 +127,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
             >
               <Image
                 style={{ flex: 0.5, width: 100, height: 60 }}
-                source={{
-                  uri: `https://carly-backend-app.azurewebsites.net/logic/api/cars/${item.id}/image2`,
-                }}
+                source={carImages[index]}
               />
               <View style={{ flex: 0.7, marginLeft: 10 }}>
                 <Text style={styles.headerCarTextBold}>{item.brand}</Text>
@@ -120,9 +143,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
               <View style={styles_ext.photoName}>
                 <Image
                   style={styles_ext.image}
-                  source={{
-                    uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`,
-                  }}
+                  source={carImages[index]}
                 />
                 <Text style={styles_ext.headerCarTextBold}>{item.brand}</Text>
                 <Text style={styles_ext.headerCarText}>{item.model}</Text>
