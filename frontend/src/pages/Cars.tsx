@@ -105,10 +105,13 @@ function Cars() {
   const { token, setToken } = useContext(Context);
 
   const [sort, setSort] = React.useState("");
+  const [search, setSearch] = React.useState("");
 
   const handleSortChange = (event: SelectChangeEvent) => {
     setSort(event.target.value);
+    sortCars();
   };
+
 
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
@@ -132,7 +135,7 @@ function Cars() {
     await fetch(`${properties.url}/logic/api/cars`, {
       method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -151,9 +154,62 @@ function Cars() {
       });
   };
 
+  const sortCars = async () => {
+    await fetch(`${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=${sort}&page=0&itemsOnPage=4&25`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((cars) => {
+        setCars(cars);
+
+        console.log("Success fetching cars.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch cars: " + e);
+      });
+  };
+
+  const searchCars = async () => {
+    await fetch(
+      `${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=brand&page=0&itemsOnPage=4&model=${search}%25`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) return response.json();
+        else {
+          throw new Error("ERROR " + response.status);
+        }
+      })
+      .then((cars) => {
+        setCars(cars);
+
+        console.log("Success fetching cars.");
+      })
+      .catch((e) => {
+        console.log("Error when trying to fetch cars: " + e);
+      });
+  };
+
   useEffect(() => {
-    getCars();
-  }, []);
+    if (search === "") {
+      getCars();
+    } else {
+      searchCars();
+    }
+  }, [search]);
 
   const updateList = () => {
     getCars();
@@ -161,7 +217,6 @@ function Cars() {
   const addClick = () => {
     render(<AddCarFormContainer updateList={updateList} />);
   };
-
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -249,8 +304,9 @@ function Cars() {
                   <SearchIcon style={{ color: "black" }} />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Search…"
+                  placeholder="Search by model…"
                   inputProps={{ "aria-label": "search" }}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </Search>
             </Grid>
