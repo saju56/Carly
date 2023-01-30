@@ -20,7 +20,7 @@ const AddCarImageFormContainer: React.FC<AddImageProps> = (props: AddImageProps)
         const formData = new FormData();
         formData.append("file", img);
         console.log(formData);
-        await fetch(`${properties.url}/logic/api/cars/${carId}/image`, {
+        await fetch(`${properties.url}/logic/api/cars/image/${carId}`, {
             method: "POST",
             headers: {
                 Authorization: auth,
