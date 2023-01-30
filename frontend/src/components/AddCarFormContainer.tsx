@@ -20,6 +20,8 @@ const AddCarFormContainer: React.FC<AddCarProps> = (props: AddCarProps) => {
           method: "POST",
           headers: {
             'Authorization': `Bearer ${token}`,
+            "Content-type": "application/json; charset=UTF-8",
+          body: JSON.stringify(car)
           },
         })
           .then((response) => {
@@ -29,14 +31,11 @@ const AddCarFormContainer: React.FC<AddCarProps> = (props: AddCarProps) => {
             }
           })
           .then(() => {
-            props.updateList();
             console.log("Success adding car.");
           })
           .catch((e) => {
             console.log("Error when trying to add car: " + e);
           })
-          .finally(()=>
-            setSaving(false));
       };
 
 

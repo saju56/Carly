@@ -6,5 +6,7 @@ export type Booking = {
   endDate: String;
   startDate: String;
   userId: String;     
+  name: String;
+  surname: String;
 };
 

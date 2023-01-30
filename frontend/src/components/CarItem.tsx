@@ -40,12 +40,14 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
 
     }
 
-    const saveHandle = async(id: String) => {
+    const saveHandle = async(id: String, car: Car) => {
         await fetch(`${properties.url}/logic/api/cars/${id}`, {
             method: "PUT",
             headers: {
               'Authorization': `Bearer ${token}`,
+              "Content-type": "application/json; charset=UTF-8",
             },
+            body: JSON.stringify(car)
           })
             .then((response) => {
               if (response.ok) return response.json();
@@ -78,11 +80,12 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
               else throw new Error("ERROR " + response.status)
             }).then(() => {
               console.log("Success deleting car.")
-              props.updateList();
             }).catch((e) => {
               console.log("Error when trying to deleting car: " + e)
+              setDeleting(false);
             }).finally(()=>{
                 setDeleting(false);
+                props.updateList();
             })
     }
 
@@ -285,7 +288,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                         disabled={false}
                                         size="small"
                                         variant="outlined"
-                                        onClick={()=>saveHandle(props.car.id)}
+                                        onClick={()=>saveHandle(props.car.id, currentCar)}
                                         >
                                         save
                                     </Button>

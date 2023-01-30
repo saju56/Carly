@@ -41,9 +41,10 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
               else throw new Error("ERROR " + response.status)
             }).then(() => {
               console.log("Success cancelling booking.")
-              props.updateList();
             }).catch((e) => {
               console.log("Error when trying to cancel booking: " + e)
+            }).finally(()=>{
+              props.updateList();
             });
     }
     
@@ -69,14 +70,14 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
         d_from.getMonth(),
         d_from.getDate()
       );
-      setDateFrom(utc1);
       let _MS_PER_DAY = 1000 * 60 * 60 * 24;
+      setDateFrom(utc1/_MS_PER_DAY);
       let utc2 = Date.UTC(
         d_to.getFullYear(),
         d_to.getMonth(),
         d_to.getDate()
       );
-      setDateTo(utc2);
+      setDateTo(utc2/_MS_PER_DAY);
       setCost((Math.floor(utc2 - utc1) / _MS_PER_DAY) * car.pricePerDay);
     }).catch((e) => {
       console.log("Error when trying to fetch car: " + e);
