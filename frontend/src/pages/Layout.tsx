@@ -1,11 +1,6 @@
-import { AppBar, Button,  Divider,  Drawer, IconButton,  List,  ListItem,  ListItemButton,  ListItemIcon,  ListItemText,  Menu, MenuItem, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { Box } from "@mui/system";
-import { useContext, useState } from "react";
-import Cars from './Cars';
-import Bookings from './Bookings';
-import { styled, useTheme } from '@mui/material/styles';
+import { Button,  Divider,  Drawer,  List,  ListItem,  ListItemButton, Toolbar, Typography } from "@mui/material";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import React from "react";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Context } from "../App";
