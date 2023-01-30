@@ -65,14 +65,12 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
             console.log("Success fetching car image.")
         }).catch((e) => {
             console.log("Error when trying to fetch car image: " + e)
-        }).finally(()=>{
-            props.updateList();
         })
     }
 
     const addCarImage = () => {
         const root = hydrateRoot(document.getElementById('root')!,
-            <AddCarImageFormContainer updateList={props.updateList} token={token} carId={props.car.id}/>)
+            <AddCarImageFormContainer updateImage={() => getCarImage(props.car.id)} token={token} carId={props.car.id}/>)
     }
 
     const saveHandle = async(id: String, car: Car) => {

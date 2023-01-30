@@ -7,7 +7,7 @@ import { properties } from '../resources/properties';
 import AddCarImageForm from "./AddCarImageForm";
 
 export interface AddImageProps {
-    updateList: () => void;
+    updateImage: () => void;
     token: String;
     carId: String;
 }
@@ -24,7 +24,6 @@ const AddCarImageFormContainer: React.FC<AddImageProps> = (props: AddImageProps)
             method: "POST",
             headers: {
                 Authorization: auth,
-                'Accept': 'application/json'
             },
             body: formData
 
@@ -48,11 +47,12 @@ const AddCarImageFormContainer: React.FC<AddImageProps> = (props: AddImageProps)
         <Loader loading={saving} label={"Saving"}>
             <AddCarImageForm carId={props.carId} saveImage={(carId: String, img: string) => {
                 setSaving(true)
-                addCarImage(img, props.token, carId).then(()=> {
-                    props.updateList();
-                })
+                addCarImage(img, props.token, carId)
                     .catch(e => console.error(JSON.stringify(e)))
-                    .finally(()=>setSaving(false));
+                    .finally(()=> {
+                        setSaving(false)
+                        props.updateImage();
+                    });
             }}/>
         </Loader>
     );
