@@ -66,9 +66,6 @@ export default function MenuView({route, navigation} : MenuViewProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>carly</Text>
-      <MaterialCommunityIcons name="car-side"></MaterialCommunityIcons>
-      <MaterialCommunityIcons name="car-pickup"></MaterialCommunityIcons>
-      <MaterialCommunityIcons name="car-sports"></MaterialCommunityIcons>
       <Pressable
           onPress={() => navigation.navigate('Cars', route.params)}
           style={({ pressed }) => [{ backgroundColor: pressed ? 'black' : 'white' }, styles.button ]}>
