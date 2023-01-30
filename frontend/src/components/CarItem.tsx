@@ -49,9 +49,9 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     const getCarImage = async (carId: String) => {
         await fetch(`${properties.url}/logic/api/cars/image/${carId}`, {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
+           // headers: {
+           //     Authorization: `Bearer ${token}`,
+           // }
         }).then((response) => {
             if (response.ok) return response.arrayBuffer()
             else throw new Error("ERROR " + response.status)

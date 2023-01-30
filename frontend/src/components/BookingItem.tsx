@@ -22,7 +22,22 @@ const RightText = styled(Typography)({
 const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) => {
     const [deleting, setDeleting] = useState(false);
     const {token, setToken} = useContext(Context);
-    const [currCar, setCurrCar] = useState<Car>();
+    let car_: Car = {
+      id: "",
+      brand: "",
+      model: "",
+      doors: -1,
+      seats: -1,
+      year: -1,
+      fuelType: "",
+      pricePerDay: -1,
+      vin: -1,
+      mileage: -1,
+      city: "",
+      bodyType: "",
+    };
+    const [currCar, setCurrCar] = useState<Car>(car_);
+    
     const [cost, setCost] = useState(0);
     const [dateFrom, setDateFrom] = useState<Date>();
     const [dateTo, setDateTo] = useState<Date>();
@@ -86,9 +101,47 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
         spacing: 8,
       }
 
-    useEffect(() => {
-        getOneCar();
-    }, []);
+
+    const [carImage, setCarImage] = useState<string>();
+
+    useEffect(()=> {
+      getOneCar();
+      if(currCar.id !==  null){
+        getCarImage(currCar.id);
+      }
+  }, [])
+
+  const getCarImage = async (carId: String) => {
+      await fetch(`${properties.url}/logic/api/cars/image/${carId}`, {
+          method: "GET",
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+      }).then((response) => {
+          if (response.ok) return response.arrayBuffer()
+          else throw new Error("ERROR " + response.status)
+      }).then((data) => {
+
+          var img = 'data:image/jpg;base64, '+_arrayBufferToBase64(data);
+          if (img !== null) {
+              setCarImage(img);
+          }
+
+          console.log("Success fetching car image.")
+      }).catch((e) => {
+          console.log("Error when trying to fetch car image: " + e)
+      })
+  }
+
+  function _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}
 
     return (
         <Loader loading={deleting} label="Deleting">
@@ -98,7 +151,8 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
                             {/*Render the InnerGrid as a child item */}
                                 <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <CardMedia component="img"
-                                                image={`${properties.url}/logic/api/cars/image2/${props.booking.carId}`}
+                                                image={carImage}
+                                                //image={`${properties.url}/logic/api/cars/image2/${props.booking.carId}`}
                                                 alt="Car photo"
                                                 width="40px"
                                                 ></CardMedia>
