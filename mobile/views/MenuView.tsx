@@ -1,12 +1,7 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View, Pressable, Alert } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Montserrat_400Regular, useFonts } from "@expo-google-fonts/montserrat";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList, Token } from "../App";
+import { RootStackParamList } from "../App";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 type MenuViewProps = NativeStackScreenProps<RootStackParamList, 'Menu'>
@@ -36,7 +31,6 @@ export default function MenuView({route, navigation} : MenuViewProps) {
       setAttributes({ ...attributes, isLoggedIn: true})
     })
   };
-
 
   useEffect(() =>
     navigation.addListener('beforeRemove', (e) => {

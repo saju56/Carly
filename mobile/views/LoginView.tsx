@@ -1,18 +1,13 @@
-import { StatusBar } from "expo-status-bar";
-import { useCallback, useContext, useEffect, useState } from "react";
-
+import { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   TextInput,
-  Button,
   View,
-  Image,
   Text,
   Pressable,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { UserAttributes } from "../App";
 import { Token } from "../App";
 import { RootStackParamList } from "../App";

@@ -38,32 +38,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
   const [cars, setCars] = useState<Car[]>([])
   const [selectedId, setSelectedId] = useState<String>()
   const [isLoading, setIsLoading] = useState(false)
-  const [carImages, setCarImages] = useState<ImageURL[]>([])
   const attributes: UserAttributes = route.params
-
-  // const getCarImage = async (carId: String) => {
-  //   console.log(carId)
-  //   await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
-  //       method: "GET",
-  //       headers: {
-  //           Authorization: `Bearer ${attributes.token.jwttoken}`,
-  //           'Content-Type': 'application/octet-stream'
-  //       }
-  //   }).then((response) => {
-  //       if (response.ok) return response.blob()
-  //       else throw new Error("ERROR " + response.status)
-  //   }).then((data) => {
-  //       console.log(data)
-  //       const reader = new FileReader()
-  //       reader.readAsDataURL(data)
-  //       if (reader.result !== null) {
-  //         setCarImages(carImages => [...carImages, { uri: reader.result as string}])
-  //       }
-  //       console.log("Success fetching car image.")
-  //   }).catch((e) => {
-  //       console.log("Error when trying to fetch car image: " + e)
-  //   })
-  // }
 
   const getCars = async () => {
     setIsLoading(true)

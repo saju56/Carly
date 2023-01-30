@@ -1,8 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Button,
   FlatList,
   Pressable,
   RefreshControl,
@@ -12,14 +9,9 @@ import {
   Image,
   Alert,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Montserrat_400Regular, useFonts } from "@expo-google-fonts/montserrat";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, UserAttributes } from "../App";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { CarFilled } from "@ant-design/icons";
-import { CollapsedItem } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
-import { ImageURL } from "./CarsView";
 
 type BookingsViewProps = NativeStackScreenProps<RootStackParamList, "Bookings">;
 
@@ -56,34 +48,9 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
   const [currCar, setCurrCar] = useState<Car>();
   const [cost, setCost] = useState(0);
   const [isLoading, setIsLoading] = useState(false)
-  const [carImages, setCarImages] = useState<ImageURL[]>([])
 
-  // const getCarImages = async (carId: String) => {
-  //   console.log(carId)
-  //   await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
-  //       method: "GET",
-  //       headers: {
-  //           Authorization: `Bearer ${attributes.token.jwttoken}`,
-  //           'Content-Type': 'application/octet-stream'
-  //       }
-  //   }).then((response) => {
-  //       if (response.ok) return response.blob()
-  //       else throw new Error("ERROR " + response.status)
-  //   }).then((data) => {
-  //       console.log(data)
-  //       const reader = new FileReader()
-  //       reader.readAsDataURL(data)
-  //       if (reader.result !== null) {
-  //         setCarImages([ ...carImages, { uri: reader.result as string}])
-  //       }
-  //       console.log("Success fetching car image.")
-  //   }).catch((e) => {
-  //       console.log("Error when trying to fetch car image: " + e)
-  //   })
-  // }
-
-  //   admin so all bookings
   const getBookings = async () => {
+    setIsLoading(true)
     await fetch("https://carly-backend-app.azurewebsites.net/logic/api/bookings", {
       method: "GET",
       headers: {
@@ -102,6 +69,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
     .catch((e) => {
       console.log("Error when trying to fetch bookings: " + e);
     });
+    setIsLoading(false)
   }
 
   useEffect(() => {

@@ -1,11 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import LoginView from "./views/LoginView";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MenuView from "./views/MenuView";
 import BookingsView from "./views/BookingsView";
-import { createContext, useContext, useState } from "react";
 import CarsView from "./views/CarsView";
 
 export type RootStackParamList = {
