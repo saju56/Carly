@@ -12,7 +12,7 @@ export interface AddImageProps {
     carId: String;
 }
 
-const AddCarImageFormContaine: React.FC<AddImageProps> = (props: AddImageProps) => {
+const AddCarImageFormContainer: React.FC<AddImageProps> = (props: AddImageProps) => {
     const [saving, setSaving] = useState(false);
 
     const addCarImage = async (img: string, token:String, carId: String) => {
@@ -58,4 +58,4 @@ const AddCarImageFormContaine: React.FC<AddImageProps> = (props: AddImageProps) 
     );
 }
 
-export default AddCarImageFormContaine;
+export default AddCarImageFormContainer;

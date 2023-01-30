@@ -25,9 +25,10 @@ import CarItem from "../components/CarItem";
 import { Car } from "../model/Car";
 import AddIcon from "@mui/icons-material/Add";
 import AddCarFormContainer from "../components/AddCarFormContainer";
-import { render } from "@testing-library/react";
 import { Context } from "../App";
 import { properties } from "../resources/properties";
+import {render} from "react-dom";
+import {createRoot, hydrateRoot} from "react-dom/client";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -215,7 +216,8 @@ function Cars() {
     getCars();
   };
   const addClick = () => {
-    render(<AddCarFormContainer updateList={updateList} token={token}/>);
+    const root = hydrateRoot(document.getElementById('root')!, <AddCarFormContainer updateList={updateList} token={token}/>)
+    //cr.render(<AddCarFormContainer updateList={updateList} token={token}/>);
   };
 
   return (
@@ -324,7 +326,7 @@ function Cars() {
       </Grid>
 
       {/* Floating add button */}
-      <Fab
+      <Fab id="addButton"
         onClick={addClick}
         variant="extended"
         size="medium"

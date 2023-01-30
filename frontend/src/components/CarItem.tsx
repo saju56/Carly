@@ -4,9 +4,10 @@ import Loader from "../utils/Loader";
 import { Box, Button, Card, CardMedia, Grid, styled, TextField, Typography } from '@mui/material';
 import { properties } from '../resources/properties';
 import { Context } from '../App';
-import {render} from "@testing-library/react";
 import AddCarFormContainer from "./AddCarFormContainer";
 import AddCarImageFormContainer from "./AddCarImageFormContainer";
+import {render} from "react-dom";
+import {hydrateRoot} from "react-dom/client";
 
 
 
@@ -70,7 +71,8 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     }
 
     const addCarImage = () => {
-        render(<AddCarImageFormContainer updateList={props.updateList} token={token} carId={props.car.id}/>);
+        const root = hydrateRoot(document.getElementById('root')!,
+            <AddCarImageFormContainer updateList={props.updateList} token={token} carId={props.car.id}/>)
     }
 
     const saveHandle = async(id: String, car: Car) => {
