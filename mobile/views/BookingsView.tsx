@@ -58,29 +58,29 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [carImages, setCarImages] = useState<ImageURL[]>([])
 
-  const getCarImages = async (carId: String) => {
-    console.log(carId)
-    await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${attributes.token.jwttoken}`,
-            'Content-Type': 'application/octet-stream'
-        }
-    }).then((response) => {
-        if (response.ok) return response.blob()
-        else throw new Error("ERROR " + response.status)
-    }).then((data) => {
-        console.log(data)
-        const reader = new FileReader()
-        reader.readAsDataURL(data)
-        if (reader.result !== null) {
-          setCarImages([ ...carImages, { uri: reader.result as string}])
-        }
-        console.log("Success fetching car image.")
-    }).catch((e) => {
-        console.log("Error when trying to fetch car image: " + e)
-    })
-  }
+  // const getCarImages = async (carId: String) => {
+  //   console.log(carId)
+  //   await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
+  //       method: "GET",
+  //       headers: {
+  //           Authorization: `Bearer ${attributes.token.jwttoken}`,
+  //           'Content-Type': 'application/octet-stream'
+  //       }
+  //   }).then((response) => {
+  //       if (response.ok) return response.blob()
+  //       else throw new Error("ERROR " + response.status)
+  //   }).then((data) => {
+  //       console.log(data)
+  //       const reader = new FileReader()
+  //       reader.readAsDataURL(data)
+  //       if (reader.result !== null) {
+  //         setCarImages([ ...carImages, { uri: reader.result as string}])
+  //       }
+  //       console.log("Success fetching car image.")
+  //   }).catch((e) => {
+  //       console.log("Error when trying to fetch car image: " + e)
+  //   })
+  // }
 
   //   admin so all bookings
   const getBookings = async () => {
@@ -103,13 +103,6 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
       console.log("Error when trying to fetch bookings: " + e);
     });
   }
-  
-  useEffect(() => {
-    bookings.forEach(async (booking) => [
-      await getCarImages(booking.carId)
-    ])
-  }, [bookings])
-
 
   useEffect(() => {
     getBookings();
@@ -231,7 +224,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
             >
               <Image
                 style={{ flex: 0.5, width: 100, height: 60 }}
-                source={carImages}
+                source={{ uri: `https://carly-backend-app.azurewebsites.net/logic/api/cars/image2/${item.carId}`}}
               />
               <View style={{ flex: 0.7, marginLeft: 10 }}>
                 <Text style={styles.headerCarTextBold}>booking no {index + 1}</Text>
@@ -247,7 +240,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
               <View style={styles_ext.photoName}>
                 <Image
                   style={styles_ext.image}
-                  source={carImages}
+                  source={{ uri: `https://carly-backend-app.azurewebsites.net/logic/api/cars/image2/${item.carId}`}}
                 />
                 <Text style={styles_ext.headerCarTextBold}>
                   {currCar?.brand}

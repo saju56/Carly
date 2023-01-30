@@ -41,29 +41,29 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
   const [carImages, setCarImages] = useState<ImageURL[]>([])
   const attributes: UserAttributes = route.params
 
-  const getCarImage = async (carId: String) => {
-    console.log(carId)
-    await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${attributes.token.jwttoken}`,
-            'Content-Type': 'application/octet-stream'
-        }
-    }).then((response) => {
-        if (response.ok) return response.blob()
-        else throw new Error("ERROR " + response.status)
-    }).then((data) => {
-        console.log(data)
-        const reader = new FileReader()
-        reader.readAsDataURL(data)
-        if (reader.result !== null) {
-          setCarImages(carImages => [...carImages, { uri: reader.result as string}])
-        }
-        console.log("Success fetching car image.")
-    }).catch((e) => {
-        console.log("Error when trying to fetch car image: " + e)
-    })
-  }
+  // const getCarImage = async (carId: String) => {
+  //   console.log(carId)
+  //   await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
+  //       method: "GET",
+  //       headers: {
+  //           Authorization: `Bearer ${attributes.token.jwttoken}`,
+  //           'Content-Type': 'application/octet-stream'
+  //       }
+  //   }).then((response) => {
+  //       if (response.ok) return response.blob()
+  //       else throw new Error("ERROR " + response.status)
+  //   }).then((data) => {
+  //       console.log(data)
+  //       const reader = new FileReader()
+  //       reader.readAsDataURL(data)
+  //       if (reader.result !== null) {
+  //         setCarImages(carImages => [...carImages, { uri: reader.result as string}])
+  //       }
+  //       console.log("Success fetching car image.")
+  //   }).catch((e) => {
+  //       console.log("Error when trying to fetch car image: " + e)
+  //   })
+  // }
 
   const getCars = async () => {
     setIsLoading(true)
@@ -88,12 +88,6 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
   useEffect(() => {
     getCars()
   }, [])
-
-  useEffect(() => {
-    cars.forEach(async (car) => [
-      await getCarImage(car.id)
-    ])
-  }, [cars])
 
   return (
     <View style={styles.container}>
@@ -127,7 +121,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
             >
               <Image
                 style={{ flex: 0.5, width: 100, height: 60 }}
-                source={carImages[index]}
+                source={{ uri: `https://carly-backend-app.azurewebsites.net/logic/api/cars/image2/${item.id}`}}
               />
               <View style={{ flex: 0.7, marginLeft: 10 }}>
                 <Text style={styles.headerCarTextBold}>{item.brand}</Text>
@@ -143,7 +137,7 @@ export default function CarsView({ route, navigation }: CarsViewProps) {
               <View style={styles_ext.photoName}>
                 <Image
                   style={styles_ext.image}
-                  source={carImages[index]}
+                  source={{ uri: `https://carly-backend-app.azurewebsites.net/logic/api/cars/image2/${item.id}`}}
                 />
                 <Text style={styles_ext.headerCarTextBold}>{item.brand}</Text>
                 <Text style={styles_ext.headerCarText}>{item.model}</Text>
