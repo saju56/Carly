@@ -2,32 +2,19 @@ import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router-dom";
 import "./Cars.css";
-import {
-  autocompleteClasses,
-  Fab,
-  FormControl,
+import {  
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   SelectChangeEvent,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Loader from "../utils/Loader";
 import BookingItem from "../components/BookingItem";
-import { Car } from "../model/Car";
-import AddIcon from "@mui/icons-material/Add";
 import { Booking } from "../model/Booking";
 import { Context } from "../App";
-/* READ DATA FOR TESTING ONLY  */
-import { maxHeaderSize } from "http";
 import { properties } from "../resources/properties";
 
 const Search = styled("div")(({ theme }) => ({

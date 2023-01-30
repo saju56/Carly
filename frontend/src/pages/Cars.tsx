@@ -15,17 +15,12 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Stack,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import Loader from "../utils/Loader";
 import CarItem from "../components/CarItem";
 import { Car } from "../model/Car";
 import AddIcon from "@mui/icons-material/Add";
-
-/* READ DATA FOR TESTING ONLY  */
-import { maxHeaderSize } from "http";
-import AddCarForm from "../components/AddCarForm";
 import AddCarFormContainer from "../components/AddCarFormContainer";
 import { render } from "@testing-library/react";
 import { Context } from "../App";

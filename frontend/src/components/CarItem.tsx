@@ -1,8 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {Car} from "../model/Car";
 import Loader from "../utils/Loader";
-import { updateCommaList } from 'typescript';
-import { Box, Button, Card, CardMedia, Grid, makeStyles, styled, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardMedia, Grid, styled, TextField, Typography } from '@mui/material';
 import { properties } from '../resources/properties';
 import { Context } from '../App';
 

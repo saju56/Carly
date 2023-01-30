@@ -1,5 +1,3 @@
-import {Key} from "react";
-
 export type Booking = {
   id: String;
   carId: String;
