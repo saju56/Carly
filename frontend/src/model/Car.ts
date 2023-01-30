@@ -2,7 +2,6 @@ export type Car = {
   id: String;
   brand: String;
   model: String;
-  status: boolean;
   seats: number;
   doors: number;
   fuelType: String;

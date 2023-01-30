@@ -15,7 +15,6 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
     id: "",
     brand: "",
     model: "",
-    status: true,
     doors: -1,
     seats: -1,
     year: -1,

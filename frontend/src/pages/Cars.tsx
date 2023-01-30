@@ -215,7 +215,7 @@ function Cars() {
     getCars();
   };
   const addClick = () => {
-    render(<AddCarFormContainer updateList={updateList} />);
+    render(<AddCarFormContainer updateList={updateList} token={token}/>);
   };
 
   return (
