@@ -7,6 +7,7 @@ import { Montserrat_400Regular, useFonts } from "@expo-google-fonts/montserrat";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, Token } from "../App";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 type MenuViewProps = NativeStackScreenProps<RootStackParamList, 'Menu'>
 
@@ -65,17 +66,28 @@ export default function MenuView({route, navigation} : MenuViewProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>carly</Text>
+      <MaterialCommunityIcons name="car-side"></MaterialCommunityIcons>
+      <MaterialCommunityIcons name="car-pickup"></MaterialCommunityIcons>
+      <MaterialCommunityIcons name="car-sports"></MaterialCommunityIcons>
       <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('Cars', route.params)}
-      >
-        <Text style={styles.loginText}>cars</Text>
+          onPress={() => navigation.navigate('Cars', route.params)}
+          style={({ pressed }) => [{ backgroundColor: pressed ? 'black' : 'white' }, styles.button ]}>
+          {({ pressed }) => (
+            <>
+              <MaterialIcons name="directions-car" style={[{ color: pressed ? 'white' : 'black'}, styles.buttonIcons]}></MaterialIcons>
+              <Text style={[{ color: pressed ? 'white' : 'black'}, styles.loginText]}>cars</Text>  
+            </>
+          )}
       </Pressable>
       <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('Bookings', route.params)}
-      >
-        <Text style={styles.loginText}>bookings</Text>
+          onPress={() => navigation.navigate('Bookings', route.params)}
+          style={({ pressed }) => [{ backgroundColor: pressed ? 'black' : 'white' }, styles.button ]}>
+          {({ pressed }) => (
+            <>
+              <MaterialCommunityIcons name="calendar-month" style={[{ color: pressed ? 'white' : 'black'}, styles.buttonIcons]}></MaterialCommunityIcons>
+              <Text style={[{ color: pressed ? 'white' : 'black'}, styles.loginText]}>bookings</Text>  
+            </>
+          )}
       </Pressable>
     </View>
   );
@@ -89,24 +101,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
+  buttonIcons: {
+    alignSelf: 'center',
+    fontSize: 30,
+    position: 'absolute',
+    left: 30
+  },
   logo: {
-    fontSize: 64,
+    fontSize: 80,
     padding: 20,
     letterSpacing: 16,
     textShadowColor: "white",
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-    marginBottom: 80
+    textShadowOffset: { width: 3, height: 0 },
+    textShadowRadius: 3,
+    height: '40%'
   },
   button: {
-    height: 85,
-    width: 350,
+    height: 80,
+    width: '80%',
     margin: 12,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: "white",
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -114,11 +133,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   loginText: {
-    letterSpacing: 4,
+    letterSpacing: 0,
     fontSize: 25,
     fontWeight: '600'
   },
