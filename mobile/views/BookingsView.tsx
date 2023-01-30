@@ -19,6 +19,7 @@ import { RootStackParamList, UserAttributes } from "../App";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { CarFilled } from "@ant-design/icons";
 import { CollapsedItem } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
+import { ImageURL } from "./CarsView";
 
 type BookingsViewProps = NativeStackScreenProps<RootStackParamList, "Bookings">;
 
@@ -28,6 +29,8 @@ type Booking = {
   endDate: String;
   startDate: String;
   userId: String;
+  name: String;
+  lastname: String
 };
 
 type Car = {
@@ -53,6 +56,31 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
   const [currCar, setCurrCar] = useState<Car>();
   const [cost, setCost] = useState(0);
   const [isLoading, setIsLoading] = useState(false)
+  const [carImages, setCarImages] = useState<ImageURL[]>([])
+
+  const getCarImages = async (carId: String) => {
+    console.log(carId)
+    await fetch(`https://carly-backend-app.azurewebsites.net/logic/api/cars/${carId}/image`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${attributes.token.jwttoken}`,
+            'Content-Type': 'application/octet-stream'
+        }
+    }).then((response) => {
+        if (response.ok) return response.blob()
+        else throw new Error("ERROR " + response.status)
+    }).then((data) => {
+        console.log(data)
+        const reader = new FileReader()
+        reader.readAsDataURL(data)
+        if (reader.result !== null) {
+          setCarImages([ ...carImages, { uri: reader.result as string}])
+        }
+        console.log("Success fetching car image.")
+    }).catch((e) => {
+        console.log("Error when trying to fetch car image: " + e)
+    })
+  }
 
   //   admin so all bookings
   const getBookings = async () => {
@@ -74,11 +102,18 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
     .catch((e) => {
       console.log("Error when trying to fetch bookings: " + e);
     });
-  };
+  }
+  
+  useEffect(() => {
+    bookings.forEach(async (booking) => [
+      await getCarImages(booking.carId)
+    ])
+  }, [bookings])
+
 
   useEffect(() => {
     getBookings();
-  }, []);
+  }, [])
 
   const handleExtension = async (
     id: String,
@@ -120,7 +155,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
     }).catch((e) => {
       console.log("Error when trying to fetch car: " + e);
     });
-  };
+  }
 
   const handleCancel = async (id: String) => {
     if (!attributes.isLoggedIn) {
@@ -149,11 +184,12 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
             }).catch((e) => {
               console.log("Error when trying to cancel booking: " + e)
             });
+            getBookings()
           },
         },
       ]
     );
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -163,10 +199,13 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
           <Text style={styles.headerText}>bookings</Text>
         </View>
         <Pressable
-          style={styles.button}
           onPress={() => navigation.navigate("Menu", attributes)}
-        >
-          <Text style={styles.menuText}>home</Text>
+          style={({ pressed }) => [{ borderColor: pressed ? 'transparent' : 'black' }, { backgroundColor: pressed ? 'black' : 'transparent' }, styles.button ]}>
+          {({ pressed }) => (
+            <Text style={[{ color: pressed ? 'white' : 'black' }, styles.menuText]}>
+              home
+            </Text>
+          )}
         </Pressable>
       </View>
       <FlatList
@@ -192,13 +231,11 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
             >
               <Image
                 style={{ flex: 0.5, width: 100, height: 60 }}
-                source={{
-                  uri: `http://192.168.0.213:8080/logic/api/cars/${item.carId}/image2`,
-                }}
+                source={carImages}
               />
               <View style={{ flex: 0.7, marginLeft: 10 }}>
-                <Text style={styles.headerCarTextBold}>booking no</Text>
-                <Text style={styles.headerCarText}>{index + 1}</Text>
+                <Text style={styles.headerCarTextBold}>booking no {index + 1}</Text>
+                <Text style={styles.headerCarText}>#{item.id.substring(0,6).toUpperCase()}</Text>
               </View>
               <AntDesign name="right" size={40} style={{ margin: 10 }} />
             </Pressable>
@@ -210,9 +247,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
               <View style={styles_ext.photoName}>
                 <Image
                   style={styles_ext.image}
-                  source={{
-                    uri: `http://192.168.0.213:8080/logic/api/cars/${item.id}/image2`,
-                  }}
+                  source={carImages}
                 />
                 <Text style={styles_ext.headerCarTextBold}>
                   {currCar?.brand}
@@ -222,7 +257,7 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
               <View style={styles_ext.info}>
                 <View>
                   <Text style={styles_ext.textB}>vin:</Text>
-                  <Text style={styles_ext.textB}>booking no:</Text>
+                  <Text style={styles_ext.textB}>booking:</Text>
                   <Text style={styles_ext.textB}>name:</Text>
                   <Text style={styles_ext.textB}>surname:</Text>
                   <Text style={styles_ext.textB}>from:</Text>
@@ -230,9 +265,9 @@ export default function BookingsView({ route, navigation }: BookingsViewProps) {
                 </View>
                 <View>
                   <Text style={styles_ext.text}>{currCar?.vin}</Text>
-                  <Text style={styles_ext.text}>{index + 1}</Text>
-                  <Text style={styles_ext.text}>Szymon</Text>
-                  <Text style={styles_ext.text}>Slusarz</Text>
+                  <Text style={styles_ext.text}>#{item.id.substring(0,6).toUpperCase()}</Text>
+                  <Text style={styles_ext.text}>{item.name}</Text>
+                  <Text style={styles_ext.text}>{item.lastname}</Text>
                   <Text style={styles_ext.text}>
                     {item.startDate.substring(0, 10)}
                   </Text>
@@ -336,9 +371,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
-
     flexDirection: "row",
     alignItems: "center",
   },
@@ -352,7 +385,8 @@ const styles = StyleSheet.create({
     marginBottom: -10,
   },
   headerCarText: {
-    fontSize: 25,
+    padding: 8,
+    fontSize: 22,
   },
 });
 
@@ -372,9 +406,7 @@ const styles_ext = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
-
     alignItems: "center",
   },
   info: {
