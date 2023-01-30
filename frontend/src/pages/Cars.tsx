@@ -159,7 +159,7 @@ function Cars() {
 
   const searchCars = async () => {
     await fetch(
-      `${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=${sort}&page=${page-1}&itemsOnPage=${ITEMS_ON_PAGE}&model=${search}%&bodyType=${filter}%25`,
+      `${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=${sort}&page=${page-1}&itemsOnPage=${ITEMS_ON_PAGE}&model=${search}%25&bodyType=${filter}%25`,
       {
         method: "GET",
         headers: {

@@ -47,7 +47,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
         getCarImage(props.car.id);
     }, [])
     const getCarImage = async (carId: String) => {
-        await fetch(`${properties.url}/logic/api/cars/${carId}/image`, {
+        await fetch(`${properties.url}/logic/api/cars/image/${carId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,

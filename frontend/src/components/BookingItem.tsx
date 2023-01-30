@@ -24,8 +24,8 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
     const {token, setToken} = useContext(Context);
     const [currCar, setCurrCar] = useState<Car>();
     const [cost, setCost] = useState(0);
-    const [dateFrom, setDateFrom] = useState<Number>();
-    const [dateTo, setDateTo] = useState<Number>();
+    const [dateFrom, setDateFrom] = useState<Date>();
+    const [dateTo, setDateTo] = useState<Date>();
 
     const handleCancel = async (id: String) => {
         setDeleting(true);
@@ -61,6 +61,7 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
     }).then((car) => {
       setCurrCar(car);
       console.log("Success fetching car.");
+      console.log(props.booking.startDate.substring(0, 10));
       let d_from = new Date(props.booking.startDate.substring(0, 10));
       let d_to = new Date(props.booking.endDate.substring(0, 10));
       let utc1 = Date.UTC(
@@ -69,13 +70,13 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
         d_from.getDate()
       );
       let _MS_PER_DAY = 1000 * 60 * 60 * 24;
-      setDateFrom(utc1/_MS_PER_DAY);
+      setDateFrom(d_from);
       let utc2 = Date.UTC(
         d_to.getFullYear(),
         d_to.getMonth(),
         d_to.getDate()
       );
-      setDateTo(utc2/_MS_PER_DAY);
+      setDateTo(d_to);
       setCost((Math.floor(utc2 - utc1) / _MS_PER_DAY) * car.pricePerDay);
     }).catch((e) => {
       console.log("Error when trying to fetch car: " + e);
@@ -97,7 +98,7 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
                             {/*Render the InnerGrid as a child item */}
                                 <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <CardMedia component="img"
-                                                image={`${properties.url}/logic/api/cars/${props.booking.carId}/image2`}
+                                                image={`${properties.url}/logic/api/cars/image2/${props.booking.carId}`}
                                                 alt="Car photo"
                                                 width="40px"
                                                 ></CardMedia>
@@ -107,9 +108,9 @@ const BookingListItem: React.FC<BookingItemProps> = (props: BookingItemProps) =>
                                 <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
                                     <LeftText sx={{fontWeight: 'bold'}}>booking no. #{props.booking.id.substring(0,6)}</LeftText>  
                                     <LeftText>vin: {currCar?.vin}</LeftText>
-                                    <LeftText>for: bookly</LeftText>
-                                    <LeftText>from: {String(dateFrom)}</LeftText>
-                                    <LeftText>to: {String(dateTo)}</LeftText>
+                                    <LeftText>for: {props.booking.name} {props.booking.lastname}</LeftText>
+                                    <LeftText>from: {String(dateFrom).substring(4,15)}</LeftText>
+                                    <LeftText>to: {String(dateTo).substring(4,15)}</LeftText>
 
                                 </Grid>
                                 <Grid item xs={3} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
