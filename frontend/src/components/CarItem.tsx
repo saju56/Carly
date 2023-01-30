@@ -28,7 +28,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     const [editing, setEditing] = useState(false);
     const [currentCar, setCurrentCar] = useState(props.car);
     const { token, setToken } = useContext(Context);
-    const [carImage, setCarImage] = useState<string>("");
+    const [carImage, setCarImage] = useState<string>();
 
     const theme = {
         spacing: 8,
@@ -52,12 +52,15 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 Authorization: `Bearer ${token}`,
             }
         }).then((response) => {
-            if (response.ok) return response.blob()
+            if (response.ok) return response.arrayBuffer()
             else throw new Error("ERROR " + response.status)
         }).then((data) => {
-            console.log(data);
-            var img = URL.createObjectURL(data);
-            setCarImage(img);
+
+            var img = 'data:image/jpg;base64, '+_arrayBufferToBase64(data);
+            if (img !== null) {
+                setCarImage(img);
+            }
+
             console.log("Success fetching car image.")
         }).catch((e) => {
             console.log("Error when trying to fetch car image: " + e)
@@ -67,7 +70,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     }
 
     const addCarImage = () => {
-        render(<AddCarImageFormContainer updateList={props.updateList} token={token}/>);
+        render(<AddCarImageFormContainer updateList={props.updateList} token={token} carId={props.car.id}/>);
     }
 
     const saveHandle = async(id: String, car: Car) => {
@@ -118,6 +121,15 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 setDeleting(false);
                 props.updateList();
             })
+    }
+    function _arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
     }
 
     return (
@@ -410,6 +422,16 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                    
                                 </Grid>
                                 <Grid item xs={1} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
+                                    <Button
+                                        style={{marginBottom: "5px"}}
+                                        color="inherit"
+                                        disabled={false}
+                                        size="small"
+                                        variant="outlined"
+                                        onClick={addCarImage}>
+                                        add image
+                                    </Button>
+
                                     <Button
                                         style={{marginBottom: "5px"}}
                                         color="inherit"

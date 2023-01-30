@@ -25,7 +25,6 @@ import pw.react.backend.web.UploadFileResponse;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -53,13 +52,13 @@ public class CarController extends AbstractController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(summary = "Create list of cars")
+    @Operation(summary = "Create car")
     @PostMapping(path = "")
-    public ResponseEntity<Collection<CarDto>> createCar(@RequestHeader HttpHeaders headers,
-                                                                  @Valid @RequestBody List<CarDto> cars) {
+    public ResponseEntity<CarDto> createCar(@RequestHeader HttpHeaders headers,
+                                                                  @Valid @RequestBody CarDto cars) {
         logHeaders(headers, log);
-        List<Car> createdCars = cars.stream().map(CarDto::convertToCar).toList();
-        List<CarDto> result = carService.saveManyCars(createdCars);
+        Car createdCars = CarDto.convertToCar(cars);
+        CarDto result = carService.saveCar(createdCars);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
