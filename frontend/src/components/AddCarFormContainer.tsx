@@ -58,7 +58,9 @@ const AddCarFormContainer: React.FC<AddCarProps> = (props: AddCarProps) => {
                    addCar(car, props.token)
                     .then(()=> props.updateList())
                     .catch(car => console.error(JSON.stringify(car)))
-                    .finally(()=>setSaving(false))
+                    .finally(()=>{
+                      setSaving(false);
+                      })
         }} ></AddCarForm>
         </Loader>
     )

@@ -139,17 +139,19 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 <Card>
                         <Grid container spacing={0} display='flex'>
                             {/*Render the InnerGrid as a child item */}
-                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
-                                    <Card
+                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="flex-start" justifyContent="flex-start" display="flex">
+                                <Card
                                         sx={{
-                                            maxWidth: 280,
-                                            margin: "0 auto",
+                                            maxWidth: 150,
+                                            maxHeight: 150
                                         }}
+                                        
                                     >
                                         <CardMedia component="img"
-                                                   image={carImage}
-                                                   alt="Car photo"
-                                                   sx={{ objectFit: "contain" }}
+                                                    image={carImage}
+                                                    style={{width: "100%", height: "100%"}}
+                                                    alt="Car photo"
+                                                    sx={{ objectFit: "contain" }}
                                         ></CardMedia>
                                     </Card>
                                     <LeftText ><TextField
@@ -361,15 +363,17 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 <Card>
                         <Grid container spacing={0} display="flex">
                             {/*Render the InnerGrid as a child item */}
-                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
+                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems='flex-start' justifyContent="flex-start" display="flex">
                                     <Card
                                         sx={{
-                                            maxWidth: 280,
-                                            margin: "0 auto",
+                                            maxWidth: 150,
+                                            maxHeight: 150
                                         }}
+                                        
                                     >
                                         <CardMedia component="img"
                                                     image={carImage}
+                                                    style={{width: "100%", height: "100%"}}
                                                     alt="Car photo"
                                                     sx={{ objectFit: "contain" }}
                                         ></CardMedia>

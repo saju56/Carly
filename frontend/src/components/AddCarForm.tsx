@@ -54,9 +54,9 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
       isNumberValid(addedCar.pricePerDay)
     ) {
       //add car
+      setOpen(false);
       props.saveCar(addedCar);
 
-      setOpen(false);
     }
   };
   const isStringValid = (str: String) => str.length > 1;
