@@ -30,6 +30,7 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
 
   const [open, setOpen] = React.useState(true);
 
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -53,29 +54,33 @@ const AddCarForm: React.FC<AddCarFormProps> = (props: AddCarFormProps) => {
       isNumberValid(addedCar.pricePerDay)
     ) {
       //add car
+      setOpen(false);
       props.saveCar(addedCar);
 
-      setOpen(false);
     }
   };
   const isStringValid = (str: String) => str.length > 1;
   const isNumberValid = (num: Number) => num > 0;
   const isYearValid = (num: Number) => num > 1900 && num < 2023;
-  const isBodyTypeValid = (str: String) => str.includes("cabriolet" || "coupé" || "hatchback" || "limousine" ||  "minivan" || "pickup" || "sedan" || "roadster")
+  const isBodyTypeValid = (str: String) => (str.includes("cabriolet") ||
+      str.includes("coupé") ||
+      str.includes("hatchback") ||
+      str.includes("limousine") ||
+      str.includes("minivan") ||
+      str.includes("pickup") ||
+      str.includes("sedan") ||
+      str.includes("roadster"))
   return (
     <Dialog open={open}>
       <Grid container>
         <Grid item xs={4}>
-          <Box sx={{ m: 1 }}>
-            <Card
-              style={{
-                height: "20vh",
-                margin: "auto",
-                flexDirection: "column",
-              }}
-            >
-              IMAGE UPLOADss
-            </Card>
+          <Box
+              sx={{ m: 1 }}
+              style={{ display: "flex", justifyContent: "center" }}
+          >
+            <Typography variant="h5" align="center" sx={{ fontWeight: "bold" }}>
+              car specification
+            </Typography>
           </Box>
           <Box sx={{ m: 1 }}>
             <Card>

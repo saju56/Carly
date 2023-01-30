@@ -16,6 +16,7 @@ import {
   ListItemText,
   MenuItem,
   OutlinedInput,
+  Pagination,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
@@ -25,9 +26,11 @@ import CarItem from "../components/CarItem";
 import { Car } from "../model/Car";
 import AddIcon from "@mui/icons-material/Add";
 import AddCarFormContainer from "../components/AddCarFormContainer";
-import { render } from "@testing-library/react";
 import { Context } from "../App";
 import { properties } from "../resources/properties";
+import {render} from "react-dom";
+import {createRoot, hydrateRoot} from "react-dom/client";
+const ITEMS_ON_PAGE = 3;
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -69,6 +72,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
 async function request<TResponse>(
   url: string,
   config: RequestInit = {}
@@ -89,46 +93,23 @@ const MenuProps = {
   },
 };
 
-const bodyT = [
-  'cabriolet',
-  'coupé',
-  'hatchback',
-  'limousine',
-  'minivan',
-  'pickup',
-  'sedan',
-  'roadster',
-];
 
 function Cars() {
   let navigate = useNavigate();
   const { token, setToken } = useContext(Context);
 
-  const [sort, setSort] = React.useState("");
+  const [sort, setSort] = React.useState("brand");
   const [search, setSearch] = React.useState("");
-
-  const handleSortChange = (event: SelectChangeEvent) => {
-    setSort(event.target.value);
-    sortCars();
-  };
-
+  const [filter, setFilter] = useState('');
 
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
-
-  const [bodyType_, setBodyType_] = useState<string[]>([]);
+  const [pagesCounter, setPagesCounter] = useState(0);
+  const [page, setPage] = useState(1);
    // tutaj są kryteria filtrowania
 
-   const handleChange = (event: SelectChangeEvent<typeof bodyType_>) => {
-    const {
-      target: { value },
-    } = event;
-    setBodyType_(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
+   
 
 
   const getCars = async () => {
@@ -145,8 +126,7 @@ function Cars() {
         }
       })
       .then((cars) => {
-        setCars(cars);
-
+        setPagesCounter(Math.ceil(cars.length/ITEMS_ON_PAGE));
         console.log("Success fetching cars.");
       })
       .catch((e) => {
@@ -154,32 +134,32 @@ function Cars() {
       });
   };
 
-  const sortCars = async () => {
-    await fetch(`${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=${sort}&page=0&itemsOnPage=4&25`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        else {
-          throw new Error("ERROR " + response.status);
-        }
-      })
-      .then((cars) => {
-        setCars(cars);
+  // const sortCars = async () => {
+  //   await fetch(`${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=${sort}&page=0&itemsOnPage=4&25`, {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (response.ok) return response.json();
+  //       else {
+  //         throw new Error("ERROR " + response.status);
+  //       }
+  //     })
+  //     .then((cars) => {
+  //       setCars(cars);
 
-        console.log("Success fetching cars.");
-      })
-      .catch((e) => {
-        console.log("Error when trying to fetch cars: " + e);
-      });
-  };
+  //       console.log("Success fetching cars.");
+  //     })
+  //     .catch((e) => {
+  //       console.log("Error when trying to fetch cars: " + e);
+  //     });
+  // };
 
   const searchCars = async () => {
     await fetch(
-      `${properties.url}/logic/api/offers?dateFrom=0&dateTo=0&sortBy=brand&page=0&itemsOnPage=4&model=${search}%25`,
+      `${properties.url}/logic/api/offers?dateFrom=2551277&dateTo=2551277&sortBy=${sort}&page=${page-1}&itemsOnPage=${ITEMS_ON_PAGE}&model=${search}%25&bodyType=${filter}%25`,
       {
         method: "GET",
         headers: {
@@ -195,32 +175,43 @@ function Cars() {
       })
       .then((cars) => {
         setCars(cars);
-
+        console.log(token);
         console.log("Success fetching cars.");
       })
       .catch((e) => {
+        console.log(token);
         console.log("Error when trying to fetch cars: " + e);
       });
   };
 
+
+  
   useEffect(() => {
-    if (search === "") {
+    if (pagesCounter === 0) {
+      console.log('GETCARS------------------------------------------------------------------');
       getCars();
     } else {
       searchCars();
     }
-  }, [search]);
+  }, [search, sort, filter, page, pagesCounter]);
 
   const updateList = () => {
-    getCars();
+    searchCars();
   };
   const addClick = () => {
-    render(<AddCarFormContainer updateList={updateList} token={token}/>);
+    const root = hydrateRoot(document.getElementById('root')!, <AddCarFormContainer updateList={updateList} token={token}/>)
+    //cr.render(<AddCarFormContainer updateList={updateList} token={token}/>);
+  };
+
+  
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ height: "9vh" }}>
+      <AppBar position="static" sx={{ height: "9vh" }} style={{ backgroundColor: "#DADEEA" }}>
         <Toolbar style={{ backgroundColor: "#DADEEA" }}>
           <div className="CarsHeading">
             <Typography
@@ -247,28 +238,30 @@ function Cars() {
           <Grid container justifyContent="flex-end">
             {/* filter by functionality */}
             <Grid item direction="column" alignItems="center">
-            <FormControl sx={{ m: 1, width: 120 }} size="small">
-        <InputLabel id="demo-multiple-checkbox-label">body type</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={bodyType_}
-          onChange={handleChange}
-          input={<OutlinedInput label="body type" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {bodyT.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={bodyType_.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <InputLabel id="demo-select-small">body type</InputLabel>
+                <Select
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={filter}
+                  label="body type"
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={"cabriolet"}>cabriolet</MenuItem>
+                  <MenuItem value={"coupé"}>coupé</MenuItem>
+                  <MenuItem value={"hatchback"}>hatchback</MenuItem>
+                  <MenuItem value={"limousine"}>limousine</MenuItem>
+                  <MenuItem value={"minivan"}>minivan</MenuItem>
+                  <MenuItem value={"pickup"}>pickup</MenuItem>
+                  <MenuItem value={"sedan"}>sedan</MenuItem>
+                  <MenuItem value={"roadster"}>roadster</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
-
+   
 
             {/* sort by functionality  */}
             <Grid item direction="column" alignItems="center">
@@ -279,14 +272,11 @@ function Cars() {
                   id="demo-select-small"
                   value={sort}
                   label="sort by"
-                  onChange={handleSortChange}
+                  onChange={(e) => setSort(e.target.value)}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   <MenuItem value={"brand"}>brand</MenuItem>
                   <MenuItem value={"mileage"}>mileage</MenuItem>
-                  <MenuItem value={"price"}>price per day</MenuItem>
+                  <MenuItem value={"pricePerDay"}>price/day</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -318,13 +308,14 @@ function Cars() {
       <Grid sx={{ overflowY: "scroll", maxHeight: "81vh" }}>
         <Loader loading={loading}>
           {cars.map((car) => (
+
             <CarItem car={car} updateList={updateList} />
           ))}
         </Loader>
       </Grid>
 
       {/* Floating add button */}
-      <Fab
+      <Fab id="addButton"
         onClick={addClick}
         variant="extended"
         size="medium"
@@ -340,6 +331,13 @@ function Cars() {
         <AddIcon sx={{ mr: 1 }} style={{ color: "black" }} />
         add
       </Fab>
+
+      <Pagination count={pagesCounter} defaultPage={1} page={page} onChange={handlePageChange} siblingCount={0}
+        style={{
+          position: "fixed",
+          bottom: "1.5%",
+          color: "black",
+      }}/>
     </Box>
   );
 }

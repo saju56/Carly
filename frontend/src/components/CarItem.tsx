@@ -1,9 +1,13 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Car} from "../model/Car";
 import Loader from "../utils/Loader";
 import { Box, Button, Card, CardMedia, Grid, styled, TextField, Typography } from '@mui/material';
 import { properties } from '../resources/properties';
 import { Context } from '../App';
+import AddCarFormContainer from "./AddCarFormContainer";
+import AddCarImageFormContainer from "./AddCarImageFormContainer";
+import {render} from "react-dom";
+import {hydrateRoot} from "react-dom/client";
 
 
 
@@ -25,6 +29,7 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     const [editing, setEditing] = useState(false);
     const [currentCar, setCurrentCar] = useState(props.car);
     const { token, setToken } = useContext(Context);
+    const [carImage, setCarImage] = useState<string>();
 
     const theme = {
         spacing: 8,
@@ -37,6 +42,35 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
     const cancelHandle = () => {
         setEditing(false);
 
+    }
+    useEffect(()=> {
+        getCarImage(props.car.id);
+    }, [])
+    const getCarImage = async (carId: String) => {
+        await fetch(`${properties.url}/logic/api/cars/${carId}/image`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }).then((response) => {
+            if (response.ok) return response.arrayBuffer()
+            else throw new Error("ERROR " + response.status)
+        }).then((data) => {
+
+            var img = 'data:image/jpg;base64, '+_arrayBufferToBase64(data);
+            if (img !== null) {
+                setCarImage(img);
+            }
+
+            console.log("Success fetching car image.")
+        }).catch((e) => {
+            console.log("Error when trying to fetch car image: " + e)
+        })
+    }
+
+    const addCarImage = () => {
+        const root = hydrateRoot(document.getElementById('root')!,
+            <AddCarImageFormContainer updateImage={() => getCarImage(props.car.id)} token={token} carId={props.car.id}/>)
     }
 
     const saveHandle = async(id: String, car: Car) => {
@@ -88,6 +122,15 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 props.updateList();
             })
     }
+    function _arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+    }
 
     return (
         <Loader loading={deleting} label="Deleting">
@@ -96,12 +139,21 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 <Card>
                         <Grid container spacing={0} display='flex'>
                             {/*Render the InnerGrid as a child item */}
-                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
-                                    <CardMedia component="img"
-                                                //image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2018-rolls-royce-phantom-1536152159.png?crop=1.00xw:1.00xh;0,0&resize=980:*"
-                                                alt="Car photo"
-                                                width="40px"
-                                                ></CardMedia>
+                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="flex-start" justifyContent="flex-start" display="flex">
+                                <Card
+                                        sx={{
+                                            maxWidth: 150,
+                                            maxHeight: 150
+                                        }}
+                                        
+                                    >
+                                        <CardMedia component="img"
+                                                    image={carImage}
+                                                    style={{width: "100%", height: "100%"}}
+                                                    alt="Car photo"
+                                                    sx={{ objectFit: "contain" }}
+                                        ></CardMedia>
+                                    </Card>
                                     <LeftText ><TextField
                                                         hiddenLabel
                                                         id="filled-hidden-label-small"
@@ -311,12 +363,21 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                 <Card>
                         <Grid container spacing={0} display="flex">
                             {/*Render the InnerGrid as a child item */}
-                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
-                                    <CardMedia component="img"
-                                                //image="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2018-rolls-royce-phantom-1536152159.png?crop=1.00xw:1.00xh;0,0&resize=980:*"
-                                                alt="Car photo"
-                                                width="40px"
-                                                ></CardMedia>
+                                <Grid item xs={3.5} sx={{m: 1}} direction="column" alignItems='flex-start' justifyContent="flex-start" display="flex">
+                                    <Card
+                                        sx={{
+                                            maxWidth: 150,
+                                            maxHeight: 150
+                                        }}
+                                        
+                                    >
+                                        <CardMedia component="img"
+                                                    image={carImage}
+                                                    style={{width: "100%", height: "100%"}}
+                                                    alt="Car photo"
+                                                    sx={{ objectFit: "contain" }}
+                                        ></CardMedia>
+                                    </Card>
                                     <LeftText variant='h4' sx={{fontWeight: 'bold'}}>{props.car.brand}</LeftText>
                                     <LeftText variant='h5'>{props.car.model}</LeftText>
                                 </Grid>
@@ -365,6 +426,16 @@ const CarItem: React.FC<CarItemProps> = (props: CarItemProps) => {
                                    
                                 </Grid>
                                 <Grid item xs={1} sx={{m: 1}} direction="column" alignItems="bottom" justifyContent="center" display="flex">
+                                    <Button
+                                        style={{marginBottom: "5px"}}
+                                        color="inherit"
+                                        disabled={false}
+                                        size="small"
+                                        variant="outlined"
+                                        onClick={addCarImage}>
+                                        add image
+                                    </Button>
+
                                     <Button
                                         style={{marginBottom: "5px"}}
                                         color="inherit"

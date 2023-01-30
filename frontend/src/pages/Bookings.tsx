@@ -135,20 +135,7 @@ const updateList = () => {
             </Typography>
           </div>
 
-          <Grid container justifyContent="flex-end">
-            {/* Search functionality */}
-            <Grid item direction="column" alignItems="center">
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon style={{ color: "black" }} />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
-            </Grid>
-          </Grid>
+          
         </Toolbar>
       </AppBar>
 

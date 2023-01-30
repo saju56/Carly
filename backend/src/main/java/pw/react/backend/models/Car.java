@@ -31,7 +31,7 @@ public class Car {
     @Column
     private String city;
     @Column
-    private long vin;
+    private int vin;
     @Column(name = "fuel_type")
     private String fuelType;
     @Column
@@ -72,7 +72,7 @@ public class Car {
     }
 
     public int getDoors() {
-        return seats;
+        return doors;
     }
 
     public void setDoors(int doors) {
@@ -87,11 +87,11 @@ public class Car {
         this.mileage = mileage;
     }
 
-    public long getVin() {
+    public int getVin() {
         return vin;
     }
 
-    public void setVin(long vin) {
+    public void setVin(int vin) {
         this.vin = vin;
     }
 
